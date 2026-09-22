@@ -241,12 +241,20 @@
       context.lineTo(left, centerY);
       context.closePath();
     } else if (/round|rounded|smooth|mosaic/.test(style)) {
+      var roundedInset = moduleSize * 0.04;
+      var roundedLeft = left + roundedInset;
+      var roundedTop = top + roundedInset;
+      var roundedSize = Math.max(0, size - roundedInset * 2);
+      var roundedRadius = Math.min(
+        roundedSize / 2,
+        roundedSize * (/mosaic/.test(style) ? 0.12 : isInward ? 0.46 : 0.3),
+      );
       context.roundRect(
-        left,
-        top,
-        size,
-        size,
-        size * (/mosaic/.test(style) ? 0.12 : isInward ? 0.46 : 0.3),
+        roundedLeft,
+        roundedTop,
+        roundedSize,
+        roundedSize,
+        roundedRadius,
       );
     } else {
       context.rect(left, top, size, size);
