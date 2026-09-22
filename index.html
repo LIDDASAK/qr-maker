@@ -1798,17 +1798,48 @@
                         </div>
                       </div>
 
-                      <div class="form-group shape-group">
-                        <div class="shape-options">
-                          <div
-                            class="shape"
-                            ng-click="setLogo(logo.type)"
-                            ng-class="{'active': qrcode.config.logo.replace('#', '') === logo.type}"
-                            ng-repeat="logo in PresetService.designOptions.logos"
-                          >
-                            <i
-                              class="sprite-logo sprite-logo-{{logo.type}}"
-                            ></i>
+                      <div
+                        class="logo-library"
+                        ng-init="logoGroups = [
+                          {title: 'Social Media', logos: [
+                            {type: 'facebook'}, {type: 'facebook-circle'},
+                            {type: 'twitter-circle'}, {type: 'youtube'},
+                            {type: 'youtube-circle'}, {type: 'googleplus-circle'},
+                            {type: 'instagram-circle'}, {type: 'linkedin-circle'},
+                            {type: 'xing-circle'}, {type: 'pinterest-circle'},
+                            {type: 'vimeo-circle'}, {type: 'soundcloud-circle'},
+                            {type: 'vk-circle'}, {type: 'whatsapp-circle'}
+                          ]},
+                          {title: 'Services', logos: [
+                            {type: 'appstore'}, {type: 'google-play'},
+                            {type: 'gmail'}, {type: 'calendar-circle'},
+                            {type: 'document-circle'}, {type: 'phone-circle'},
+                            {type: 'share-circle'}, {type: 'wifi-circle'}
+                          ]},
+                          {title: 'Other', logos: [
+                            {type: 'qrcodemonkey'}, {type: 'bitcoin'}
+                          ]}
+                        ]"
+                      >
+                        <div
+                          class="logo-category"
+                          ng-repeat="group in logoGroups"
+                        >
+                          <h4 class="logo-category-title">{{group.title}}</h4>
+                          <div class="form-group shape-group">
+                            <div class="shape-options">
+                              <div
+                                class="shape"
+                                ng-click="setLogo(logo.type)"
+                                ng-class="{'active': qrcode.config.logo.replace('#', '') === logo.type}"
+                                ng-repeat="logo in group.logos"
+                                title="{{logo.type}}"
+                              >
+                                <i
+                                  class="sprite-logo sprite-logo-{{logo.type}}"
+                                ></i>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1851,9 +1882,10 @@
                             ng-class="{'active': qrcode.config.body === body.type}"
                             ng-repeat="body in PresetService.designOptions.body"
                           >
-                            <i
-                              class="sprite sprite-body sprite-{{body.type}}"
-                            ></i>
+                            <img
+                              ng-src="./img/qr/body/{{body.type}}.png"
+                              alt="{{body.type}} body shape"
+                            />
                           </div>
                         </div>
                       </div>
@@ -1867,7 +1899,10 @@
                             ng-class="{'active': qrcode.config.eye === frame.type}"
                             ng-repeat="frame in PresetService.designOptions.eyeFrames"
                           >
-                            <i class="sprite sprite-{{frame.type}}"></i>
+                            <img
+                              ng-src="./img/qr/eye-frames/{{frame.type}}.png"
+                              alt="{{frame.type}} eye frame"
+                            />
                           </div>
                         </div>
                       </div>
@@ -1881,7 +1916,10 @@
                             ng-class="{'active': qrcode.config.eyeBall === ball.type}"
                             ng-repeat="ball in PresetService.designOptions.eyeBalls"
                           >
-                            <i class="sprite sprite-{{ball.type}}"></i>
+                            <img
+                              ng-src="./img/qr/eye-balls/{{ball.type}}.png"
+                              alt="{{ball.type}} eye ball"
+                            />
                           </div>
                         </div>
                       </div>

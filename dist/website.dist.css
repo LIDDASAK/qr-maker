@@ -16059,6 +16059,33 @@ label {
   display: block;
 }
 
+.wrapper .qrcode-generator .settings .logo-library {
+  margin-top: 18px;
+}
+
+.wrapper .qrcode-generator .settings .logo-category {
+  padding: 12px 0 6px;
+  border-top: 1px solid rgba(95, 103, 109, 0.16);
+}
+
+.wrapper .qrcode-generator .settings .logo-category:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.wrapper .qrcode-generator .settings .logo-category-title {
+  margin: 0 0 10px;
+  color: #5f676d;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.wrapper .qrcode-generator .settings .logo-category .shape-group {
+  margin-bottom: 4px;
+}
+
 .wrapper .qrcode-generator .template-button .btn {
   border-color: transparent;
   background: rgba(255, 255, 255, 0.25);
