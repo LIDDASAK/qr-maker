@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="1000"
+   height="1000"
+   viewBox="0 0 1000 1000"
+   id="svg6742"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="vimeo-circle.svg"
+   inkscape:export-filename="C:\xampp\htdocs\lumen\public\img\qr\logos\vimeo-circle.png"
+   inkscape:export-xdpi="9"
+   inkscape:export-ydpi="9">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2160"
+     inkscape:window-height="1377"
+     id="namedview9"
+     showgrid="false"
+     inkscape:zoom="0.25"
+     inkscape:cx="-1382.5037"
+     inkscape:cy="156.80793"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6742" />
+  <defs
+     id="defs6744" />
+  <metadata
+     id="metadata6747">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="g3763">
+    <path
+       transform="translate(316,272)"
+       d="m 608,228 a 424,424 0 1 1 -848,0 424,424 0 1 1 848,0 z"
+       sodipodi:ry="424"
+       sodipodi:rx="424"
+       sodipodi:cy="228"
+       sodipodi:cx="184"
+       id="path3761"
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       sodipodi:type="arc" />
+    <path
+       inkscape:export-ydpi="116.95907"
+       inkscape:export-xdpi="116.95907"
+       inkscape:export-filename="C:\xampp\htdocs\qrcode\icons\vimeo-small.png"
+       inkscape:connector-curvature="0"
+       d="M 789.60422,376.8731 C 756.22351,565.03553 569.62453,724.34518 513.52301,760.75127 457.36057,797.07614 406.17275,746.11168 387.63468,707.61422 366.35549,663.67512 302.63976,425.44162 285.9697,405.70558 c -16.71065,-19.75634 -66.74111,19.73604 -66.74111,19.73604 l -24.28443,-31.87817 c 0,0 101.64483,-121.3604 179.00524,-136.58883 82.01016,-16.0203 81.86802,125.96954 101.62436,204.83249 19.06599,76.30456 31.87817,119.89847 48.52792,119.89847 16.69035,0 48.56854,-42.47715 83.45178,-107.71573 34.94416,-65.27919 -1.52203,-122.94416 -69.8071,-81.92893 C 565.0763,228.22335 823.00522,188.81218 789.60422,376.8731 z M 500.00016,0 C 223.85803,0 0,223.87817 0,500 c 0,276.18274 223.85803,500 500.00016,500 276.12183,0 499.95946,-223.81726 499.95946,-500 0,-276.12183 -223.83763,-500 -499.95946,-500"
+       style="fill:#00b7ea;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="path3267-7" />
+  </g>
+</svg>

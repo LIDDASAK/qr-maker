@@ -1,0 +1,2151 @@
+<!doctype html>
+<html lang="th" ng-app="app">
+  <head>
+    <meta charset="UTF-8" />
+    <title>QR Code Maker</title>
+    <meta
+      name="description"
+      content="ສ້າງ QR Code ພ້ອມໂລໂກ້, ສີ ແລະດີຍາຍຂອງທ່ານໄດ້ຟຣີ ເຄື່ອງມືນີ້ຮອງຮັບໄຟລ໌ເວກເຕີ້ຣ໌ເພື່ອໃຫ້ຄວາມເປັນໄປໄດ້ການພິມພຽງທີສຸດ"
+    />
+    <meta
+      name="keywords"
+      content="ສ້າງ qr code, qr code generator, ຕັ້ງ qr code, qr code ຟຣີ, ສ້າງ qr code ເພີ່ມ logo"
+    />
+    <meta
+      name="viewport"
+      content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <link rel="stylesheet" href="./fonts/PhetsarathOT/phetsarath.css" />
+    <link rel="stylesheet" href="./dist/website.dist.css" />
+    <style>
+      html,
+      body,
+      body *:not([class*="fa"]):not([class*="icon-"]) {
+        font-family: "Phetsarath OT", sans-serif;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-weight: 900;
+      }
+
+      [class*="fa"],
+      [class^="icon-"],
+      [class*=" icon-"] {
+        font-family: FontAwesome !important;
+      }
+
+      [class^="icon-"],
+      [class*=" icon-"] {
+        font-family: icomoon !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background"></div>
+    <div class="wrapper" ng-controller="MainCtrl">
+      <div class="qrcode-generator" ng-controller="GeneratorCtrl">
+        <div class="type-bar" ng-class="{'menu-open': moreMenuOpen}">
+          <div class="scroll-left">
+            <!-- <i class="fa fa-chevron-left"></i>-->
+          </div>
+          <div class="scroll-right">
+            <!--<i class="fa fa-chevron-right"></i>-->
+          </div>
+          <div class="type-bar-inner">
+            <a
+              href="#url"
+              class="tab"
+              ng-class="{'active': qrcode.type==='url'}"
+              ng-click="setTab('url')"
+              title="Create QR Code for a Website"
+              >URL</a
+            >
+            <a
+              href="#text"
+              class="tab"
+              ng-class="{'active': qrcode.type==='text'}"
+              ng-click="setTab('text')"
+              title="Create QR Code for a Text"
+              >Text</a
+            >
+            <a
+              href="#email"
+              class="tab"
+              ng-class="{'active': qrcode.type==='email'}"
+              ng-click="setTab('email')"
+              title="Create QR Code for an Email"
+              >Email</a
+            >
+            <a
+              href="#phone"
+              class="tab"
+              ng-class="{'active': qrcode.type==='phone'}"
+              ng-click="setTab('phone')"
+              title="Create QR Code for a Phone Number"
+              >Phone</a
+            >
+            <a
+              href="#sms"
+              class="tab"
+              ng-class="{'active': qrcode.type==='sms'}"
+              ng-click="setTab('sms')"
+              title="Create QR Code for a SMS"
+              >SMS</a
+            >
+            <a
+              href="#vcard"
+              class="tab"
+              ng-class="{'active': qrcode.type==='vcard'}"
+              ng-click="setTab('vcard')"
+              title="Create QR Code for a vCard"
+              >vCard</a
+            >
+            <a
+              href="#mecard"
+              class="tab"
+              ng-class="{'active': qrcode.type==='mecard'}"
+              ng-click="setTab('mecard')"
+              title="Create QR Code for a MeCard"
+              >MeCard</a
+            >
+            <a
+              href="#maps"
+              class="tab"
+              ng-class="{'active': qrcode.type==='maps'}"
+              ng-click="setTab('maps')"
+              title="Create QR Code for a Google Maps Location"
+              >Location</a
+            >
+
+            <ul class="tabsocial">
+              <li>
+                <a
+                  href="#social"
+                  class="tab"
+                  ng-class="{'active': qrcode.type==='social'}"
+                  ng-click="openModal('types', 'social')"
+                  title="Mocial solutions"
+                >
+                  SOCIAL MEDIA
+                </a>
+                <ul>
+                  <li>
+                    <a
+                      href="#facebook"
+                      class="tab"
+                      ng-class="{'active': qrcode.type==='facebook'}"
+                      ng-click="setTab('facebook')"
+                      title="Create QR Code for Facebook"
+                      >Create Facebook</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#twitter"
+                      class="tab"
+                      ng-class="{'active': qrcode.type==='twitter'}"
+                      ng-click="setTab('twitter')"
+                      title="Create QR Code for Twitter"
+                      >Create Twitter
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#youtube"
+                      class="tab"
+                      ng-class="{'active': qrcode.type==='youtube'}"
+                      ng-click="setTab('youtube')"
+                      title="Create QR code for Youtube"
+                      >Create Youtube</a
+                    >
+                  </li>
+                </ul>
+              </li>
+            </ul>
+
+            <!-----------------------------------------------------------------------------------
+            <a
+              href="#facebook"
+              class="tab"
+              ng-class="{'active': qrcode.type==='facebook'}"
+              ng-click="setTab('facebook')"
+              title="Create QR Code for Facebook"
+              >Facebook</a
+            >
+            <a
+              href="#twitter"
+              class="tab"
+              ng-class="{'active': qrcode.type==='twitter'}"
+              ng-click="setTab('twitter')"
+              title="Create QR Code for Twitter"
+              >Twitter</a
+            >
+            <a
+              href="#youtube"
+              class="tab"
+              ng-class="{'active': qrcode.type==='youtube'}"
+              ng-click="setTab('youtube')"
+              title="Create QR code for Youtube"
+              >Youtube</a
+            >
+            ------------------------------------------------------------------->
+            <a
+              href="#wifi"
+              class="tab"
+              ng-class="{'active': qrcode.type==='wifi'}"
+              ng-click="setTab('wifi')"
+              title="Create QR Code for a WIFI Network"
+              >WI-FI</a
+            >
+            <a
+              href="#event"
+              class="tab"
+              ng-class="{'active': qrcode.type==='event'}"
+              ng-click="setTab('event')"
+              title="Create QR Code for an Event"
+              >Event</a
+            >
+            <a
+              href="#bitcoin"
+              class="tab"
+              ng-class="{'active': qrcode.type==='bitcoin'}"
+              ng-click="setTab('bitcoin')"
+              title="Create a Bitcoin QR Code to receive a Payment"
+              >Bitcoin</a
+            >
+            <ul class="tabmore">
+              <li ng-class="{'is-open': moreMenuOpen}">
+                <a
+                  href="#more"
+                  class="tab"
+                  ng-class="{'active': qrcode.type==='more'}"
+                  ng-click="$event.preventDefault(); $event.stopPropagation(); moreMenuOpen = !moreMenuOpen"
+                  ng-attr-aria-expanded="{{moreMenuOpen ? 'true' : 'false'}}"
+                  title="More solutions"
+                >
+                  More/ເພີ່ມເຕີມ
+                </a>
+                <ul class="more-popup" ng-click="$event.stopPropagation()">
+                  <li>
+                    <a href="qr1.html">Create QR 1</a>
+                  </li>
+                  <li>
+                    <a href="qr2.html">Create QR 2</a>
+                  </li>
+                  <li>
+                    <a href="https://www.phanliddasak.com/">PDF</a>
+                  </li>
+                  <li>
+                    <a href="http://m.me/100011043886191">Messenger</a>
+                  </li>
+                  <li>
+                    <a href="https://wa.me/+8562099716641">WhatsApp</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="settings">
+          <div class="container-fluid">
+            <div class="row inner">
+              <div class="col-md-7 col-lg-8 settings-options">
+                <div class="accordion">
+                  <div
+                    class="pane active"
+                    ng-class="{'active':editView==='content'}"
+                  >
+                    <div class="pane-header" ng-click="setEditView('content')">
+                      <div class="icon">
+                        <i class="fa fa-globe"></i>
+                      </div>
+                      <h3 class="title">ໃສ່ເນື້ອຫາຕ່າງໆ</h3>
+                      <div class="plus">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                      </div>
+                      <div class="minus">
+                        <i class="fa fa-minus" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                    <div class="pane-content">
+                      <div
+                        class="tab-content"
+                        ng-class="{'active': qrcode.type==='url'}"
+                      >
+                        <form
+                          name="urlForm"
+                          ng-submit="qrcodeGenerator()"
+                          novalidate
+                        >
+                          <div
+                            class="form-group"
+                            ng-class="{'has-danger': (urlForm.qrcodeUrl.$invalid || urlForm.qrcodeUrl.$error.required) && urlForm.$submitted}"
+                          >
+                            <label for="qrcodeUrl">Your URL</label>
+                            <input
+                              type="url"
+                              ng-model="qrcode.data.url"
+                              class="form-control"
+                              id="qrcodeUrl"
+                              name="qrcodeUrl"
+                              aria-describedby="urlHelp"
+                              placeholder="http://"
+                              required
+                              autofocus
+                            />
+                            <small
+                              ng-show="(urlForm.qrcodeUrl.$invalid || urlForm.qrcodeUrl.$error.required) && urlForm.$submitted"
+                              class="error-text"
+                            >
+                              Enter a valid URL
+                            </small>
+                          </div>
+                        </form>
+
+                        <div>
+                          <span class="stats-text"> ປັບແຕ່ງ QR Code </span>
+                        </div>
+                      </div>
+                      <toggle
+                        ng-model="toggleValue"
+                        ng-change="changed()"
+                      ></toggle>
+
+                      <div
+                        class="tab-content"
+                        ng-class="{'active': qrcode.type==='text'}"
+                      >
+                        <form
+                          name="textForm"
+                          ng-submit="qrcodeGenerator()"
+                          novalidate
+                        >
+                          <div
+                            class="form-group"
+                            ng-class="{'has-danger':textForm.qrcodeText.$error.required && textForm.$submitted}"
+                          >
+                            <label for="qrcodeText">ໃສ່ເນື້ອຫາຂໍ້ຄວາມ</label>
+                            <textarea
+                              rows="3"
+                              ng-model="qrcode.data.text"
+                              class="form-control"
+                              id="qrcodeText"
+                              name="qrcodeText"
+                              maxlength="400"
+                              aria-describedby="textHelp"
+                              required
+                            ></textarea>
+                            <small
+                              ng-show="textForm.qrcodeText.$error.required && textForm.$submitted"
+                              class="error-text"
+                            >
+                              This field is required
+                            </small>
+                            <small class="form-text text-muted"
+                              >ອະນຸຍາດໃຫ້ມີການແບ່ງວັກໄດ້
+                            </small>
+                          </div>
+                        </form>
+                      </div>
+
+                      <div
+                        class="tab-content"
+                        ng-class="{'active': qrcode.type==='email'}"
+                      >
+                        <form
+                          name="emailForm"
+                          ng-submit="qrcodeGenerator()"
+                          novalidate
+                        >
+                          <div
+                            class="form-group"
+                            ng-class="{'has-danger':(emailForm.qrcodeEmail.$error.required || emailForm.qrcodeEmail.$invalid) && emailForm.$submitted}"
+                          >
+                            <label for="qrcodeEmail">Your Email</label>
+                            <input
+                              type="email"
+                              ng-model="qrcode.data.email"
+                              class="form-control"
+                              id="qrcodeEmail"
+                              name="qrcodeEmail"
+                              placeholder="name@mail.com"
+                              required
+                            />
+                            <small
+                              ng-show="(emailForm.qrcodeEmail.$invalid || emailForm.qrcodeEmail.$error.required) && emailForm.$submitted"
+                              class="error-text"
+                            >
+                              Enter a valid Email
+                            </small>
+                          </div>
+                          <div class="form-group">
+                            <label for="qrcodeEmailSubject">Subject</label>
+                            <input
+                              type="text"
+                              ng-model="qrcode.data.emailSubject"
+                              class="form-control"
+                              id="qrcodeEmailSubject"
+                              name="qrcodeEmailSubject"
+                            />
+                          </div>
+                          <div class="form-group">
+                            <label for="qrcodeEmailMessage">Message</label>
+                            <textarea
+                              rows="3"
+                              ng-model="qrcode.data.emailMessage"
+                              class="form-control"
+                              id="qrcodeEmailMessage"
+                              name="qrcodeEmailMessage"
+                              maxlength="400"
+                              aria-describedby="textHelp"
+                            ></textarea>
+                          </div>
+                        </form>
+                      </div>
+
+                      <div
+                        class="tab-content"
+                        ng-class="{'active': qrcode.type==='phone'}"
+                      >
+                        <form
+                          name="phoneForm"
+                          ng-submit="qrcodeGenerator()"
+                          novalidate
+                        >
+                          <div
+                            class="form-group"
+                            ng-class="{'has-danger':(phoneForm.qrcodePhone.$error.required || phoneForm.qrcodePhone.$invalid) && phoneForm.$submitted}"
+                          >
+                            <label for="qrcodePhone">ໃສ່ເບີ້ໂທຂອງທ່ານ</label>
+                            <input
+                              type="tel"
+                              ng-model="qrcode.data.phone"
+                              class="form-control"
+                              placeholder="+856 20 9752...."
+                              id="qrcodePhone"
+                              name="qrcodePhone"
+                              required
+                            />
+                            <small
+                              ng-show="(phoneForm.qrcodePhone.$invalid || phoneForm.qrcodePhone.$error.required) && phoneForm.$submitted"
+                              class="error-text"
+                            >
+                              ກະຣູນາໃສ່ເບີໂທລະສັບທີ່ຖືກຕ້ອງ
+                            </small>
+                          </div>
+                        </form>
+                      </div>
+
+                      <div
+                        class="tab-content"
+                        ng-class="{'active': qrcode.type==='sms'}"
+                      >
+                        <form
+                          name="smsForm"
+                          ng-submit="qrcodeGenerator()"
+                          novalidate
+                        >
+                          <div
+                            class="form-group"
+                            ng-class="{'has-danger':(smsForm.qrcodeSmsPhone.$error.required || smsForm.qrcodeSmsPhone.$invalid) && smsForm.$submitted}"
+                          >
+                            <label for="qrcodeSmsPhone">ໃສ່ເບີ້ໂທຂອງທ່ານ</label>
+                            <input
+                              type="tel"
+                              ng-model="qrcode.data.smsPhone"
+                              class="form-control"
+                              placeholder="+856 20 9752...."
+                              id="qrcodeSmsPhone"
+                              name="qrcodeSmsPhone"
+                              required
+                            />
+                            <small
+                              ng-show="(smsForm.qrcodeSmsPhone.$invalid || smsForm.qrcodeSmsPhone.$error.required) && smsForm.$submitted"
+                              class="error-text"
+                            >
+                              ກະຣູນາໃສ່ເບີໂທລະສັບທີ່ຖືກຕ້ອງ
+                            </small>
+                          </div>
+                          <div class="form-group">
+                            <label for="qrcodeSmsText"
+                              >ໃສ່ເນືອຫາຂໍ້ຄວາມຂອງທ່ານ</label
+                            >
+                            <textarea
+                              ng-model="qrcode.data.smsText"
+                              class="form-control"
+                              id="qrcodeSmsText"
+                              name="qrcodeSmsText"
+                              maxlength="400"
+                            ></textarea>
+                          </div>
+                        </form>
+                      </div>
+
+                      <div
+                        class="tab-content"
+                        ng-class="{'active': qrcode.type==='vcard'}"
+                      >
+                        <form
+                          name="vcardForm"
+                          class="row"
+                          ng-submit="qrcodeGenerator()"
+                          novalidate
+                        >
+                          <div class="col-lg-12">
+                            <div class="form-check form-check-inline">
+                              <label class="form-check-label">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="vcardVersion"
+                                  ng-model="qrcode.data.vcardVersion"
+                                  value="2"
+                                />
+                                ເວີຊັ່ນ 2
+                              </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <label class="form-check-label">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="vcardVersion"
+                                  ng-model="qrcode.data.vcardVersion"
+                                  value="3"
+                                />
+                                ເວີຊັ່ນ 3
+                              </label>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardFirstname">ຊື່ຈິງ</label>
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.vcardFirstname"
+                                class="form-control"
+                                id="qrcodeVcardFirstname"
+                                name="qrcodeVcardFirstname"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardLastname">ນາມສະກຸນ</label>
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.vcardLastname"
+                                class="form-control"
+                                id="qrcodeVcardLastname"
+                                name="qrcodeVcardLastname"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardOrganization"
+                                >ອົງການຈັດຕັ້ງ</label
+                              >
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.vcardOrganization"
+                                class="form-control"
+                                id="qrcodeVcardOrganization"
+                                name="qrcodeVcardOrganization"
+                              />
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardTitle"
+                                >ໜ້າທີ່ຕຳແໜ່ງງານ</label
+                              >
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.vcardTitle"
+                                class="form-control"
+                                id="qrcodeVcardTitle"
+                                name="qrcodeVcardTitle"
+                              />
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardPhoneWork"
+                                >ເບີ້ໂທທີ່ທຳງານ</label
+                              >
+                              <input
+                                type="tel"
+                                ng-model="qrcode.data.vcardPhoneWork"
+                                class="form-control"
+                                id="qrcodeVcardPhoneWork"
+                                name="qrcodeVcardPhoneWork"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardPhonePrivate"
+                                >ເບີ້ໂທທີ່ບ້ານ</label
+                              >
+                              <input
+                                type="tel"
+                                ng-model="qrcode.data.vcardPhonePrivate"
+                                class="form-control"
+                                id="qrcodeVcardPhonePrivate"
+                                name="qrcodeVcardPhonePrivate"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardPhoneMobile"
+                                >ເບີ້ໂທລະສັບມືຖື</label
+                              >
+                              <input
+                                type="tel"
+                                ng-model="qrcode.data.vcardPhoneMobile"
+                                class="form-control"
+                                id="qrcodeVcardPhoneMobile"
+                                name="qrcodeVcardPhoneMobile"
+                              />
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardFaxWork"
+                                >ແຟັກ ທີ່ທຳງານ</label
+                              >
+                              <input
+                                type="tel"
+                                ng-model="qrcode.data.vcardFaxWork"
+                                class="form-control"
+                                id="qrcodeVcardFaxWork"
+                                name="qrcodeVcardFaxWork"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardFaxPrivate"
+                                >ແຟັກ ສ່ວນຕົວ</label
+                              >
+                              <input
+                                type="tel"
+                                ng-model="qrcode.data.vcardFaxPrivate"
+                                class="form-control"
+                                id="qrcodeVcardFaxPrivate"
+                                name="qrcodeVcardFaxPrivate"
+                              />
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardEmail">Email</label>
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.vcardEmail"
+                                class="form-control"
+                                id="qrcodeVcardEmail"
+                                name="qrcodeVcardEmail"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardUrl">Website</label>
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.vcardUrl"
+                                class="form-control"
+                                id="qrcodeVcardUrl"
+                                name="qrcodeVcardUrl"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardStreet">ຖະໜົນ</label>
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.vcardStreet"
+                                class="form-control"
+                                id="qrcodeVcardStreet"
+                                name="qrcodeVcardStreet"
+                              />
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardZipcode"
+                                >ລະຫັດໄປສະນີ</label
+                              >
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.vcardZipcode"
+                                class="form-control"
+                                id="qrcodeVcardZipcode"
+                                name="qrcodeVcardZipcode"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardCity">ເມືອງ</label>
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.vcardCity"
+                                class="form-control"
+                                id="qrcodeVcardCity"
+                                name="qrcodeVcardCity"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardState">ແຂວງ</label>
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.vcardState"
+                                class="form-control"
+                                id="qrcodeVcardState"
+                                name="qrcodeVcardState"
+                              />
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeVcardCountry">ປະເທດ</label>
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.vcardCountry"
+                                class="form-control"
+                                id="qrcodeVcardCountry"
+                                name="qrcodeVcardCountry"
+                              />
+                            </div>
+                          </div>
+                          <button type="submit" class="ng-hide"></button>
+                        </form>
+                      </div>
+
+                      <div
+                        class="tab-content"
+                        ng-class="{'active': qrcode.type==='mecard'}"
+                      >
+                        <form
+                          name="mecardForm"
+                          ng-submit="qrcodeGenerator()"
+                          class="row"
+                          novalidate
+                        >
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeMecardFirstname"
+                                >Firstname/ຊື່</label
+                              >
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.mecardFirstname"
+                                class="form-control"
+                                id="qrcodeMecardFirstname"
+                                name="qrcodeMecardFirstname"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeMecardLastname"
+                                >Lastname/ນາມສະກຸນ</label
+                              >
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.mecardLastname"
+                                class="form-control"
+                                id="qrcodeMecardLastname"
+                                name="qrcodeMecardLastname"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeMecardNickname"
+                                >Nickname/ຊື່ຫຼິ້ນ</label
+                              >
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.mecardNickname"
+                                class="form-control"
+                                id="qrcodeMecardNickname"
+                                name="qrcodeMecardNickname"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeMecardPhone1"
+                                >Phone1/ເບີ້ໂທ</label
+                              >
+                              <input
+                                type="tel"
+                                ng-model="qrcode.data.mecardPhone1"
+                                class="form-control"
+                                id="qrcodeMecardPhone1"
+                                name="qrcodeMecardPhone1"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeMecardPhone2"
+                                >Phone2/ມືຖື</label
+                              >
+                              <input
+                                type="tel"
+                                ng-model="qrcode.data.mecardPhone2"
+                                class="form-control"
+                                id="qrcodeMecardPhone2"
+                                name="qrcodeMecardPhone2"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeMecardPhone3"
+                                >Phone3/ຕັ້ງໂຕະ</label
+                              >
+                              <input
+                                type="tel"
+                                ng-model="qrcode.data.mecardPhone3"
+                                class="form-control"
+                                id="qrcodeMecardPhone3"
+                                name="qrcodeMecardPhone3"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeMecardEmail">Email</label>
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.mecardEmail"
+                                class="form-control"
+                                id="qrcodeMecardEmail"
+                                name="qrcodeMecardEmail"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeMecardUrl">Website</label>
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.mecadUrl"
+                                class="form-control"
+                                id="qrcodeMecardUrl"
+                                name="qrcodeMecardUrl"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeMecardBirthday"
+                                >Birthday/ວັນເກີດ</label
+                              >
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.mecardBirthday"
+                                placeholder="YYYY-MM-DD"
+                                class="form-control"
+                                id="qrcodeMecardBirthday"
+                                name="qrcodeMecardBirthday"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeMecardStreet"
+                                >Street/ຖະໜົນ</label
+                              >
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.mecardStreet"
+                                class="form-control"
+                                id="qrcodeMecardStreet"
+                                name="qrcodeMecardStreet"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeMecardZipcode"
+                                >Zipcode/ໄປສະນີ</label
+                              >
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.mecardZipcode"
+                                class="form-control"
+                                id="qrcodeMecardZipcode"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeMecardCity">City/ເມືອງ</label>
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.mecardCity"
+                                class="form-control"
+                                id="qrcodeMecardCity"
+                                name="qrcodeMecardCity"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeMecardState"
+                                >Province/ແຂວງ</label
+                              >
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.mecardState"
+                                class="form-control"
+                                id="qrcodeMecardState"
+                                name="qrcodeMecardState"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeMecardCountry"
+                                >Country/ປະເທດ</label
+                              >
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.mecardCountry"
+                                class="form-control"
+                                id="qrcodeMecardCountry"
+                                name="qrcodeMecardCountry"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcodeMecardNotes"
+                                >Notes/ບັນທຶກ</label
+                              >
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.mecardNotes"
+                                class="form-control"
+                                id="qrcodeMecardNotes"
+                                name="qrcodeMecardNotes"
+                              />
+                            </div>
+                          </div>
+                          <button type="submit" class="ng-hide"></button>
+                        </form>
+                      </div>
+
+                      <div
+                        class="tab-content"
+                        ng-class="{'active': qrcode.type==='maps'}"
+                      >
+                        <form
+                          name="mapsForm"
+                          ng-submit="qrcodeGenerator()"
+                          novalidate=""
+                        >
+                          <div class="form-group">
+                            <label>Search Your Address</label>
+                            <input
+                              class="form-control"
+                              ng-change="setLocation()"
+                              g-places-autocomplete
+                              ng-model="mapsSearch"
+                              placeholder="5th Avenue, Vientian Laos..."
+                              type="text"
+                            />
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <label for="qrcodeMapsLatitude">Latitude</label>
+                                <input
+                                  class="form-control"
+                                  type="number"
+                                  ng-change="updateMap()"
+                                  id="qrcodeMapsLatitude"
+                                  name="qrcodeMapsLatitude"
+                                  ng-model="qrcode.data.mapsLatitude"
+                                  min="-90"
+                                  max="90"
+                                />
+                              </div>
+                            </div>
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <label for="qrcodeMapsLongitude"
+                                  >Longitude</label
+                                >
+                                <input
+                                  class="form-control"
+                                  type="number"
+                                  ng-change="updateMap()"
+                                  id="qrcodeMapsLongitude"
+                                  name="qrcodeMapsLongitude"
+                                  ng-model="qrcode.data.mapsLongitude"
+                                  min="-180"
+                                  max="180"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <div id="map" style="height: 300px"></div>
+                          </div>
+
+                          <div class="form-group alert alert-info">
+                            You can manually drag the marker on the map.
+                          </div>
+                        </form>
+                      </div>
+
+                      <div
+                        class="tab-content"
+                        ng-class="{'active': qrcode.type==='facebook'}"
+                      >
+                        <form
+                          name="facebookForm"
+                          ng-submit="qrcodeGenerator()"
+                          novalidate
+                        >
+                          <div>
+                            <div class="form-check form-check-inline">
+                              <label class="form-check-label">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="qrcodeFacebookType"
+                                  ng-model="qrcode.data.facebookType"
+                                  id="qrcodeFacebookTypeUrl"
+                                  value="url"
+                                />
+                                Facebook URL
+                              </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <label class="form-check-label">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="qrcodeFacebookType"
+                                  ng-model="qrcode.data.facebookType"
+                                  id="qrcodeFacebookTypeShare"
+                                  value="share"
+                                />
+                                Share URL
+                              </label>
+                            </div>
+                          </div>
+                          <div
+                            class="form-group"
+                            ng-class="{'hidden': qrcode.data.facebookType !== 'url', 'has-danger': (facebookForm.qrcodeFacebookUrl.$invalid || facebookForm.qrcodeFacebookUrl.$error.required) && facebookForm.$submitted}"
+                          >
+                            <label for="qrcodeFacebookUrl"
+                              >Your Facebook URL</label
+                            >
+                            <input
+                              type="url"
+                              ng-model="qrcode.data.facebookUrl"
+                              class="form-control"
+                              id="qrcodeFacebookUrl"
+                              name="qrcodeFacebookUrl"
+                              placeholder="https://facebook.com"
+                              ng-required="qrcode.data.facebookType === 'url'"
+                            />
+                            <small
+                              ng-show="(facebookForm.qrcodeFacebookUrl.$invalid || facebookForm.qrcodeFacebookUrl.$error.required) && facebookForm.$submitted"
+                              class="error-text"
+                            >
+                              Enter a valid URL
+                            </small>
+                          </div>
+                          <div
+                            class="form-group"
+                            ng-class="{'hidden': qrcode.data.facebookType !== 'share', 'has-danger': (facebookForm.qrcodeFacebookShare.$invalid || facebookForm.qrcodeFacebookShare.$error.required) && facebookForm.$submitted}"
+                          >
+                            <label for="qrcodeFacebookShare"
+                              >Share your URL on Facebook</label
+                            >
+                            <input
+                              type="url"
+                              ng-model="qrcode.data.facebookShare"
+                              class="form-control"
+                              id="qrcodeFacebookShare"
+                              name="qrcodeFacebookShare"
+                              placeholder="http://"
+                              ng-required="qrcode.data.facebookType === 'share'"
+                            />
+                            <small
+                              ng-show="(facebookForm.qrcodeFacebookShare.$invalid || facebookForm.qrcodeFacebookShare.$error.required) && facebookForm.$submitted"
+                              class="error-text"
+                            >
+                              Enter a valid URL
+                            </small>
+                          </div>
+                        </form>
+                      </div>
+
+                      <div
+                        class="tab-content"
+                        ng-class="{'active': qrcode.type==='twitter'}"
+                      >
+                        <form
+                          name="twitterForm"
+                          ng-submit="qrcodeGenerator()"
+                          novalidate
+                        >
+                          <div>
+                            <div class="form-check form-check-inline">
+                              <label class="form-check-label">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="qrcodeTwitterType"
+                                  ng-model="qrcode.data.twitterType"
+                                  id="qrcodeTwitterTypeUrl"
+                                  value="url"
+                                />
+                                Twitter URL
+                              </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <label class="form-check-label">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="qrcodeTwitterType"
+                                  ng-model="qrcode.data.twitterType"
+                                  id="qrcodeTwitterTypeTweet"
+                                  value="tweet"
+                                />
+                                Tweet
+                              </label>
+                            </div>
+                          </div>
+                          <div
+                            class="form-group"
+                            ng-class="{'hidden': qrcode.data.twitterType !== 'url', 'has-danger': (twitterForm.qrcodeTwitterUrl.$invalid || twitterForm.qrcodeTwitterUrl.$error.required) && twitterForm.$submitted}"
+                          >
+                            <label for="qrcodeTwitterUrl"
+                              >Your Twitter URL</label
+                            >
+                            <input
+                              type="url"
+                              ng-model="qrcode.data.twitterUrl"
+                              class="form-control"
+                              id="qrcodeTwitterUrl"
+                              name="qrcodeTwitterUrl"
+                              placeholder="https://twitter.com"
+                              ng-required="qrcode.data.twitterType === 'url'"
+                            />
+                            <small
+                              ng-show="(twitterForm.qrcodeTwitterUrl.$invalid || twitterForm.qrcodeTwitterUrl.$error.required) && twitterForm.$submitted"
+                              class="error-text"
+                            >
+                              Enter a valid URL
+                            </small>
+                          </div>
+                          <div
+                            class="form-group"
+                            ng-class="{'hidden': qrcode.data.twitterType !== 'tweet'}"
+                          >
+                            <label for="qrcodeTwitterTweet">Your Tweet</label>
+                            <textarea
+                              placeholder="@qrcodemonkey  the free qr code generator #qrcode"
+                              class="form-control"
+                              ng-model="qrcode.data.twitterTweet"
+                              name="qrcodeTwitterTweet"
+                              id="qrcodeTwitterTweet"
+                              maxlength="280"
+                            >
+                            </textarea>
+                          </div>
+                        </form>
+                      </div>
+
+                      <div
+                        class="tab-content"
+                        ng-class="{'active': qrcode.type==='youtube'}"
+                      >
+                        <form
+                          name="youtubeForm"
+                          ng-submit="qrcodeGenerator()"
+                          novalidate
+                        >
+                          <div
+                            class="form-group"
+                            ng-class="{'has-danger': (youtubeForm.qrcodeYoutubeUrl.$invalid || youtubeForm.qrcodeYoutubeUrl.$error.required) && youtubeForm.$submitted}"
+                          >
+                            <label for="qrcodeYoutubeUrl"
+                              >Your Youtube URL</label
+                            >
+                            <input
+                              type="url"
+                              ng-model="qrcode.data.youtubeUrl"
+                              class="form-control"
+                              id="qrcodeYoutubeUrl"
+                              name="qrcodeYoutubeUrl"
+                              placeholder="https://youtube.com"
+                              required
+                            />
+                            <small
+                              ng-show="(youtubeForm.qrcodeYoutubeUrl.$invalid || youtubeForm.qrcodeYoutubeUrl.$error.required) && youtubeForm.$submitted"
+                              class="error-text"
+                            >
+                              Enter a valid URL
+                            </small>
+                          </div>
+                        </form>
+                      </div>
+
+                      <div
+                        class="tab-content"
+                        ng-class="{'active': qrcode.type==='wifi'}"
+                      >
+                        <form
+                          name="wifiForm"
+                          ng-submit="qrcodeGenerator()"
+                          class="row"
+                          novalidate
+                        >
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcode-wifi-ssid"
+                                >Wireless SSID</label
+                              >
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.wifiSsid"
+                                class="form-control"
+                                id="qrcode-wifi-ssid"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcode-wifi-password">Password</label>
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.wifiPassword"
+                                class="form-control"
+                                id="qrcode-wifi-password"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-sm-6">
+                            <div class="form-group">
+                              <label for="qrcode-wifi-encryption"
+                                >Encryption</label
+                              >
+                              <select
+                                ng-init="qrcode.data.wifiEncryption = 'nopass'"
+                                class="form-control"
+                                ng-model="qrcode.data.wifiEncryption"
+                                id="qrcode-wifi-encryption"
+                              >
+                                <option value="nopass">no encryption</option>
+                                <option value="WEP">WEP</option>
+                                <option value="WPA">WPA/WPA2</option>
+                              </select>
+                            </div>
+                          </div>
+                          <button type="submit" class="ng-hide"></button>
+                        </form>
+                      </div>
+
+                      <div
+                        class="tab-content"
+                        ng-class="{'active': qrcode.type==='event'}"
+                      >
+                        <form
+                          name="eventForm"
+                          class="row"
+                          ng-submit="qrcodeGenerator()"
+                          novalidate
+                        >
+                          <div class="col-lg-12">
+                            <div class="form-group">
+                              <label for="qrcodeEventTitle"
+                                >Event Title/ງານຕາງໆ</label
+                              >
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.eventTitle"
+                                class="form-control"
+                                id="qrcodeEventTitle"
+                                name="qrcodeEventTitle"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label for="qrcodeEventLocation"
+                                >Event Location/ທີ່ຈັດງານ</label
+                              >
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.eventLocation"
+                                class="form-control"
+                                id="qrcodeEventLocation"
+                                name="qrcodeEventLocation"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                              <label for="qrcodeEventStarttime"
+                                >Starttime/ເລີ່ມງານ</label
+                              >
+                              <quick-datepicker
+                                ng-model="qrcode.data.eventStarttime"
+                                time-format="HH:mm"
+                                date-format="yyyy/MM/dd"
+                                placeholder=""
+                                class="form-control"
+                              >
+                              </quick-datepicker>
+                            </div>
+                          </div>
+                          <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                              <label for="qrcodeEventEndtime"
+                                >Endtime/ຈົບງານ</label
+                              >
+                              <quick-datepicker
+                                ng-model="qrcode.data.eventEndtime"
+                                time-format="HH:mm"
+                                date-format="yyyy/MM/dd"
+                                placeholder=""
+                                class="form-control"
+                              >
+                              </quick-datepicker>
+                            </div>
+                          </div>
+                          <button type="submit" class="ng-hide"></button>
+                        </form>
+                      </div>
+
+                      <div
+                        class="tab-content"
+                        ng-class="{'active': qrcode.type==='bitcoin'}"
+                      >
+                        <form
+                          name="bitcoinForm"
+                          class="row"
+                          ng-submit="qrcodeGenerator()"
+                          novalidate
+                        >
+                          <div class="col-lg-12">
+                            <label>Select Cryptocurrency</label>
+                          </div>
+                          <div class="col-lg-12">
+                            <div class="form-check form-check-inline">
+                              <label class="form-check-label">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="bitcoinType"
+                                  ng-model="qrcode.data.bitcoinType"
+                                  value="bitcoin"
+                                />
+                                Bitcoin
+                              </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <label class="form-check-label">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="bitcoinType"
+                                  ng-model="qrcode.data.bitcoinType"
+                                  value="bitcoincash"
+                                />
+                                Bitcoin Cash
+                              </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <label class="form-check-label">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="bitcoinType"
+                                  ng-model="qrcode.data.bitcoinType"
+                                  value="ethereum"
+                                />
+                                Ethereum
+                              </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <label class="form-check-label">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="bitcoinType"
+                                  ng-model="qrcode.data.bitcoinType"
+                                  value="litecoin"
+                                />
+                                Litecoin
+                              </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <label class="form-check-label">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="bitcoinType"
+                                  ng-model="qrcode.data.bitcoinType"
+                                  value="dash"
+                                />
+                                Dash
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-lg-8">
+                            <div class="form-group">
+                              <label for="qrcodeBitcoinAddress">Address</label>
+                              <input
+                                type="text"
+                                ng-model="qrcode.data.bitcoinAddress"
+                                class="form-control"
+                                placeholder="1FwFqqh71mUTENcRe9q4s9AWFgoc8BA9ZU"
+                                id="qrcodeBitcoinAddress"
+                                name="qrcodeBitcoinAddress"
+                                required
+                              />
+                              <small
+                                ng-show="(bitcoinForm.qrcodeBitcoinAddress.$invalid || bitcoinForm.qrcodeBitcoinAddress.$error.required) && bitcoinForm.$submitted"
+                                class="error-text"
+                              >
+                                This field is required
+                              </small>
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label for="qrcodeBitcoinAmount">Amount</label>
+                              <input
+                                type="number"
+                                ng-model="qrcode.data.bitcoinAmount"
+                                class="form-control"
+                                id="qrcodeBitcoinAmount"
+                                name="qrcodeBitcoinAmount"
+                              />
+                            </div>
+                          </div>
+
+                          <div class="col-lg-12">
+                            <div class="form-group alert alert-info">
+                              You can support us with a bitcoin donation!
+                              <a href="#donate">See details</a>. Thanks!
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+
+                      <div
+                        class="tab-content"
+                        ng-class="{'active': qrcode.type==='banking'}"
+                      ></div>
+                    </div>
+                  </div>
+
+                  <div class="pane" ng-class="{'active':editView==='colors'}">
+                    <div class="pane-header" ng-click="setEditView('colors')">
+                      <div class="icon">
+                        <i class="fa fa-paint-brush" aria-hidden="true"></i>
+                      </div>
+                      <h3 class="title">ຕັ້ງຄ່າສີ Qr Code</h3>
+                      <div class="plus">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                      </div>
+                      <div class="minus">
+                        <i class="fa fa-minus" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                    <div class="pane-content overflow-visible color-panel">
+                      <label>ສີພື້ນດ້ານໜ້າ</label>
+
+                      <div class="color-group color-group-body">
+                        <div class="form-check form-check-inline">
+                          <label class="form-check-label">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="colorMode"
+                              ng-model="colorMode"
+                              ng-change="setColorMode()"
+                              value="single"
+                            />
+                            ສີດຽວລ້ວນ
+                          </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <label class="form-check-label">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="colorMode"
+                              ng-model="colorMode"
+                              ng-change="setColorMode()"
+                              value="gradient"
+                            />
+                            ສີປະສົມກັນ
+                          </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <label class="form-check-label">
+                            <input
+                              class="form-check-input"
+                              ng-model="customEyeColor"
+                              ng-change="qrcode.config.gradientOnEyes = !customEyeColor; setGradientOnEyes();"
+                              type="checkbox"
+                            />
+                            ສີຕາມແບບກຳນົດເອງ
+                          </label>
+                        </div>
+
+                        <div class="row" ng-show="colorMode==='single'">
+                          <div class="col-sm-6 col-lg-4 form-group">
+                            <color-picker
+                              ng-model="qrcode.config.bodyColor"
+                              options="colorPickerOptions"
+                              event-api="eventApi"
+                            >
+                            </color-picker>
+                            <div
+                              class="fade-animation alert alert-warning ng-hide"
+                              ng-show="getBrightness(qrcode.config.bodyColor) >= 160"
+                            >
+                              ພວກເຮົາແນະນໍາໃຫ້ເຮັດໃຫ້ສີຂອງທ່ານຊ້ຳກັນ
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" ng-show="colorMode==='gradient'">
+                          <div class="col-sm-6 col-lg-4 form-group">
+                            <color-picker
+                              ng-model="qrcode.config.gradientColor1"
+                              options="colorPickerOptions"
+                              event-api="eventApi"
+                            >
+                            </color-picker>
+                            <div
+                              class="fade-animation alert alert-warning ng-hide"
+                              ng-show="getBrightness(qrcode.config.gradientColor1) >= 160"
+                            >
+                              ພວກເຮົາແນະນໍາໃຫ້ເຮັດໃຫ້ສີຂອງທ່ານຊ້ຳກັນ
+                            </div>
+                          </div>
+                          <div class="col-sm-6 col-lg-4 form-group">
+                            <color-picker
+                              ng-model="qrcode.config.gradientColor2"
+                              options="colorPickerOptions"
+                              event-api="eventApi"
+                            >
+                            </color-picker>
+                            <div
+                              class="fade-animation alert alert-warning ng-hide"
+                              ng-show="getBrightness(qrcode.config.gradientColor2) >= 160"
+                            >
+                              ພວກເຮົາແນະນໍາໃຫ້ເຮັດໃຫ້ສີຂອງທ່ານຊ້ຳກັນ
+                            </div>
+                          </div>
+                          <div class="col-sm-6 col-lg-4 form-group">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <button
+                                  class="btn btn-swap"
+                                  type="button"
+                                  ng-click="swapGradient()"
+                                >
+                                  <i class="fa fa-exchange"></i>
+                                </button>
+                              </span>
+                              <select
+                                ng-model="qrcode.config.gradientType"
+                                class="form-control"
+                              >
+                                <option value="linear">Linear Gradient</option>
+                                <option value="radial">Radial Gradient</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        class="fade-animation"
+                        ng-hide="qrcode.config.gradientOnEyes"
+                      >
+                        <label>Eye Color</label>
+                        <div class="row">
+                          <div class="col-sm-6 col-lg-4">
+                            <div class="form-group color-group">
+                              <color-picker
+                                ng-change="setEyeColor()"
+                                ng-model="qrcode.config.eye1Color"
+                                options="colorPickerOptions"
+                                event-api="colorPickerApiEye"
+                              >
+                              </color-picker>
+                              <div
+                                class="fade-animation alert alert-warning ng-hide"
+                                ng-show="getBrightness(qrcode.config.eye1Color) >= 160"
+                              >
+                                ພວກເຮົາແນະນໍາໃຫ້ເຮັດໃຫ້ສີຂອງທ່ານຊ້ຳກັນ
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-sm-6 col-lg-4">
+                            <div class="form-group color-group">
+                              <color-picker
+                                ng-model="qrcode.config.eyeBall1Color"
+                                options="colorPickerOptions"
+                                event-api="colorPickerApiEyeBall"
+                              >
+                              </color-picker>
+                              <div
+                                class="fade-animation alert alert-warning ng-hide"
+                                ng-show="getBrightness(qrcode.config.eyeBall1Color) >= 160"
+                              >
+                                ພວກເຮົາແນະນໍາໃຫ້ເຮັດໃຫ້ສີຂອງທ່ານຊ້ຳກັນ
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-6 col-lg-4 form-group">
+                            <div class="input-group">
+                              <span class="input-group-btn">
+                                <button
+                                  class="btn btn-swap"
+                                  type="button"
+                                  ng-click="swapEyeColor()"
+                                >
+                                  <i class="fa fa-exchange"></i>
+                                </button>
+                              </span>
+                              <span class="input-group-btn flex-button">
+                                <button
+                                  class="btn btn-copy"
+                                  type="button"
+                                  ng-click="copyForeground()"
+                                >
+                                  Copy Foreground
+                                </button>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-6 col-lg-4">
+                          <label>ສີພື້ນຫຼັງ</label>
+                          <div class="form-group color-group">
+                            <color-picker
+                              class="form-group"
+                              ng-model="qrcode.config.bgColor"
+                              options="colorPickerOptions"
+                            >
+                            </color-picker>
+
+                            <div
+                              class="fade-animation alert alert-warning ng-hide"
+                              ng-show="getBrightness(qrcode.config.bgColor) < 210"
+                            >
+                              Make sure there is enough contrast to the darker
+                              foreground.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="pane" ng-class="{'active':editView==='logo'}">
+                    <div class="pane-header" ng-click="setEditView('logo')">
+                      <div class="icon">
+                        <i class="fa fa-image"></i>
+                      </div>
+                      <h3 class="title">ເພີ່ມຮູບໂລໂກ້</h3>
+                      <div class="plus">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                      </div>
+                      <div class="minus">
+                        <i class="fa fa-minus" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                    <div class="pane-content">
+                      <div class="flex-row form-group flex-wrap">
+                        <div
+                          class="logo-preview"
+                          ngf-drop="onLocalLogoSelect($files)"
+                        >
+                          <img
+                            ng-src="{{logoPreview}}"
+                            ng-show="qrcode.config.logo"
+                          />
+                          <div class="placeholder" ng-hide="qrcode.config.logo">
+                            <span>No Logo</span>
+                          </div>
+                          <div
+                            class="loading-screen"
+                            ng-class="{'active':uploadProgress && uploadProgress !== '100%'}"
+                          >
+                            <span class="loader"></span>
+                          </div>
+                          <div
+                            class="upload-progress fade-animation"
+                            ng-show="uploadProgress && uploadProgress !== '100%'"
+                          >
+                            <div
+                              class="loading-bar"
+                              ng-style="{'width': uploadProgress}"
+                            ></div>
+                          </div>
+                        </div>
+                        <div>
+                          <div class="form-group">
+                            <button
+                              class="btn btn-primary btn-upload"
+                              ng-model="logoFile"
+                              ngf-accept="'image/*'"
+                              ngf-select="onLocalLogoSelect($files)"
+                              ng-click="trackClick()"
+                            >
+                              ອັບໂຫຼດຮູບ
+                            </button>
+                            <small ng-show="fileSizeError" class="error-text">
+                              File ຂະໜາດໃຫຍ່ເກີນ. 2 MB.
+                            </small>
+                            <br />
+                            <button
+                              class="btn btn-default"
+                              ng-hide="!qrcode.config.logo"
+                              ng-disabled="false"
+                              ng-click="qrcode.config.logo = ''; uploadedLogo = ''; logoUploadPending = false; logoPreview = null; qrcodePreview = null; tempQrcode = null"
+                            >
+                              ລົບໂລໂກ້ອອກ
+                            </button>
+                          </div>
+                        </div>
+
+                        <div class="banner-break d-block d-md-none"></div>
+
+                        <div class="d-flex flex-banner p-3">
+                          <div>
+                            <div class="ad d-block">
+                              <span>ເພີ່ມ</span>
+                            </div>
+                            <div class="d-block">
+                              <strong>ວິທີການເພີ່ມຮູບໂລໂກ້!</strong>
+                              <p>
+                                ຄິກອັບໂຫຼດຮູບ ຫຼັງຈາກນັ້ນ
+                                ເຂົ້າໄປເລືອຮູບທີ່ເຮົາຕ້ອງການໃຊ້ເປັນໂລໂກ້ Qr
+                                ເຮົາໄດ້ເລີຍ.
+                                <a
+                                  href="https://www.phanliddasak.com"
+                                  ng-click="openModal('logo')"
+                                  >ລາຍລະອຽດເພີ່ເຕີມ.</a
+                                >
+                              </p>
+                            </div>
+                          </div>
+                          <!------------------------------------------
+                          <img
+                            lazy-img="./img/banner-qr-code.png"
+                            class="d-none d-lg-inline-block"
+                          />
+
+                          ---------------------------->
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <div class="form-check form-check-inline">
+                          <label class="form-check-label">
+                            <input
+                              class="form-check-input"
+                              ng-model="logoMode"
+                              ng-change="setLogoMode()"
+                              type="checkbox"
+                            />
+                            ເອົາພື້ນຫຼັງ ຫຼັງໂລໂກ້ອອກ
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="form-group shape-group">
+                        <div class="shape-options">
+                          <div
+                            class="shape"
+                            ng-click="setLogo(logo.type)"
+                            ng-class="{'active': qrcode.config.logo.replace('#', '') === logo.type}"
+                            ng-repeat="logo in PresetService.designOptions.logos"
+                          >
+                            <i
+                              class="sprite-logo sprite-logo-{{logo.type}}"
+                            ></i>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group alert alert-info">
+                        ອັບໂຫຼດຮູບໂລໂກ້ຂອງທ່ານເອງເປັນຮູບແບບໄຟລ໌
+                        <strong>.png</strong>, <strong>.jpg</strong>,
+                        <strong>.gif</strong> or
+                        <strong>.svg</strong> ທີ່ມີຂະໜາດສູງສຸດ
+                        <strong>ທີ່ມີຂະໜາດສູງສຸດ 2 MB.</strong>
+                        ນອກນັ້ນທ່ານຍັງສາມາດເລືອກໂລໂກ້ສໍາລັບລະຫັດ QR
+                        ຂອງທ່ານຈາກຄັງຮູບພາບ.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="pane mb-lg-5"
+                    ng-class="{'active':editView==='shape'}"
+                  >
+                    <div class="pane-header" ng-click="setEditView('shape')">
+                      <div class="icon">
+                        <i class="fa fa-qrcode" aria-hidden="true"></i>
+                      </div>
+                      <h3 class="title">ປັບແຕ່ງການອອກແບບໃຫ້ສວຍງາມ</h3>
+                      <div class="plus">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                      </div>
+                      <div class="minus">
+                        <i class="fa fa-minus" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                    <div class="pane-content">
+                      <label>Body Shape</label>
+                      <div class="form-group shape-group">
+                        <div class="shape-options">
+                          <div
+                            class="shape"
+                            ng-click="setBodyShape(body.type)"
+                            ng-class="{'active': qrcode.config.body === body.type}"
+                            ng-repeat="body in PresetService.designOptions.body"
+                          >
+                            <i
+                              class="sprite sprite-body sprite-{{body.type}}"
+                            ></i>
+                          </div>
+                        </div>
+                      </div>
+
+                      <label>Eye Frame Shape</label>
+                      <div class="form-group shape-group">
+                        <div class="shape-options">
+                          <div
+                            class="shape"
+                            ng-click="setEyeFrameShape(frame.type)"
+                            ng-class="{'active': qrcode.config.eye === frame.type}"
+                            ng-repeat="frame in PresetService.designOptions.eyeFrames"
+                          >
+                            <i class="sprite sprite-{{frame.type}}"></i>
+                          </div>
+                        </div>
+                      </div>
+
+                      <label>Eye Ball Shape</label>
+                      <div class="form-group shape-group">
+                        <div class="shape-options">
+                          <div
+                            class="shape"
+                            ng-click="setEyeBallShape(ball.type)"
+                            ng-class="{'active': qrcode.config.eyeBall === ball.type}"
+                            ng-repeat="ball in PresetService.designOptions.eyeBalls"
+                          >
+                            <i class="sprite sprite-{{ball.type}}"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row bottom-options">
+                    <a href="#" ng-click="openModal('print')">
+                      <strong>ສ້າງໂດຍ:</strong>Phan Liddasak.
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5 col-lg-4 settings-download">
+                <div class="preview">
+                  <img
+                    class="card-img-top"
+                    src="./img/default-preview-qr.png"
+                    ng-hide="qrcodePreview"
+                    alt="QR Code Preview"
+                  />
+                  <img
+                    class="card-img-top"
+                    ng-if="qrcodePreview"
+                    ng-src="{{qrcodePreview}}"
+                    alt="Generated QR Code Preview"
+                  />
+
+                  <div class="loading-screen" ng-class="{'active':isLoading}">
+                    <span class="loader"></span>
+                  </div>
+                </div>
+
+                <div class="download-buttons">
+                  <div class="size-setting">
+                    <div class="form-group">
+                      <rzslider
+                        rz-slider-model="qrcode.size"
+                        rz-slider-options="sliderOptions"
+                      ></rzslider>
+                      <div class="size-label">
+                        <div class="start">ຄຸນະພາບຕໍ່າ</div>
+                        <div class="center">
+                          <span ng-bind="qrcode.size"></span> x
+                          <span ng-bind="qrcode.size"></span> Px
+                        </div>
+                        <div class="end">ຄຸນະພາບສູງ</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="form-group fade-animation ng-hide"
+                    ng-show="currentForm.$invalid && currentForm.$submitted"
+                  >
+                    <div class="alert alert-danger">
+                      There are errors you have to fix before generating.
+                    </div>
+                  </div>
+                  <div
+                    class="form-group fade-animation ng-hide"
+                    ng-show="!contrastCheck()"
+                  >
+                    <div class="alert alert-warning">
+                      <strong>Warning</strong> We recommend to give your colors
+                      more contrast between back- and foreground to work with
+                      all QR code readers.
+                    </div>
+                  </div>
+
+                  <div class="form-group flex-row generate-buttons">
+                    <button
+                      type="button"
+                      title="Generate QR code preview"
+                      ng-click="createLocalQr()"
+                      id="button-create-qr-code"
+                      class="btn btn-success"
+                      ng-disabled="isLoading || !generateActive || logoUploadPending"
+                    >
+                      <!--<i class="fa fa-refresh"></i>-->
+                      Create QR Code
+                    </button>
+                    <button
+                      ng-disabled="isLoading || !tempQrcode"
+                      ng-click="downloadLocalQr('png')"
+                      id="button-download-qr-code-png"
+                      class="btn btn-primary"
+                    >
+                      Download PNG
+                    </button>
+                  </div>
+                  <div class="form-group">
+                    <button
+                      ng-disabled="isLoading || !tempQrcode"
+                      ng-click="downloadLocalQr('svg')"
+                      class="btn btn-outline-primary"
+                    >
+                      .SVG
+                    </button>
+                    <button
+                      ng-disabled="isLoading || !tempQrcode"
+                      ng-click="downloadLocalQr('png')"
+                      class="btn btn-outline-primary"
+                    >
+                      .PDF*
+                    </button>
+                    <button
+                      ng-click="downloadLocalQr('png')"
+                      ng-disabled="isLoading || !tempQrcode"
+                      class="btn btn-outline-primary"
+                    >
+                      .EPS*
+                    </button>
+                  </div>
+                  <small>* no support for color gradients</small>
+                  <div
+                    ng-hide="!tempQrcode"
+                    style="
+                      border-color: #e8eef2;
+                      padding: 0.5rem;
+                      margin-top: 1rem;
+                      background: rgb(242, 248, 252);
+                    "
+                    class="alert alert-info ng-hide fade-animation"
+                    role="alert"
+                  >
+                    The created static QR code is 100% free but if you need
+                    <strong>scan statistics</strong>,
+                    <strong>flexible editability</strong> and
+                    <strong>more features</strong> then have a look at our
+                    <strong
+                      ><a
+                        target="_blank"
+                        href="https://www.phanliddasak.com"
+                        rel="nofollow noopener"
+                        >QR Code Generator</a
+                      ></strong
+                    >
+                    for professionals.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="afs_ads" style="line-height: 0">&nbsp</div>
+
+    <script>
+      window.GLOBAL_API_ENDPOINT = "";
+      window.QR_API_PROXY =
+        window.location.port === "8787" ? "/api/qr/custom" : "";
+    </script>
+    <script src="./dist/website.dist.js?v=20260923"></script>
+    <script src="./vendor/qrcode.min.js?v=20260923"></script>
+    <script src="./local-qr.js?v=20260923"></script>
+
+    <script type="text/javascript">
+      /**
+       * #### UTM-CHAINING ####
+       *
+       * Pass in existing URLSearchParams and match with URLSearchParams fetched from the given link.
+       * Returns a cleaned up string of get params ready to be concat to an existing url without params.
+       *
+       * @param  href
+       * @param  params
+       * @returns  {string}
+       */
+      var getSyncedUrlParameters = function (href, params) {
+        if (!href || !params) return "";
+
+        var tmpParams = new URLSearchParams();
+        params.forEach(function (value, key) {
+          tmpParams.append(key, value);
+        });
+
+        try {
+          var safeHref = href;
+          if (!/^https?:\/\//i.test(href) && !href.startsWith("//")) {
+            safeHref = new URL(href, window.location.href).toString();
+          }
+
+          new URLSearchParams(new URL(safeHref).search).forEach(
+            function (value, key) {
+              if (!tmpParams.has(key)) {
+                tmpParams.append(key, value);
+              } else {
+                tmpParams.delete(key);
+                tmpParams.append(key, value);
+              }
+            },
+          );
+        } catch (error) {
+          return tmpParams.toString();
+        }
+
+        var keyValueList = [];
+        tmpParams.forEach(function (value, key) {
+          keyValueList.push(key + "=" + value);
+        });
+
+        return keyValueList.join("&");
+      };
+
+      /**
+       * #### UTM-CHAINING ####
+       *
+       * Does take care of session storage init and fetching
+       * for utm params and more.
+       *
+       * @returns  {URLSearchParams}
+       */
+      var getStoredTrackingParamKeys = function () {
+        var chainedParams = localStorage.getItem("utm_chaining_params");
+
+        if (!chainedParams || chainedParams === "") {
+          localStorage.setItem(
+            "utm_chaining_params",
+            window.location.search.toString(),
+          );
+          return new URLSearchParams(window.location.search.toString());
+        }
+
+        return new URLSearchParams(chainedParams);
+      };
+
+      /**
+       * #### UTM-CHAINING ####
+       *
+       * Does iterate through every href it can find and replaces everyone
+       * that contains 'site/signup'.
+       *
+       * @param  params
+       */
+      var replaceSignupUrlParams = function (params) {
+        document.querySelectorAll("a").forEach(function (link) {
+          var href = link.getAttribute("href");
+          if (typeof href !== "string" || !href || href.includes("#")) {
+            return;
+          }
+
+          if (/^(mailto:|tel:|javascript:)/i.test(href)) {
+            return;
+          }
+
+          try {
+            var url = new URL(href, window.location.href);
+            var syncedUrlParameters = getSyncedUrlParameters(href, params);
+            link.setAttribute(
+              "href",
+              url.origin +
+                url.pathname +
+                (syncedUrlParameters ? "?" + syncedUrlParameters : ""),
+            );
+          } catch (error) {
+            // Ignore non-standard or malformed URLs; do not break page startup.
+          }
+        });
+      };
+
+      window.addEventListener("DOMContentLoaded", function () {
+        replaceSignupUrlParams(getStoredTrackingParamKeys());
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+/*!
+ * Phetsarath OT v4.100 — official Lao font, webfont kit
+ * 12 styles: weights 300/400/500/600/700/900, normal + italic
+ * License: SIL Open Font License 1.1 — free for any use, including commercial.
+ * (c) 2012 Ministry of Posts and Telecommunications, Lao PDR.
+ * Pali letters adapted from Noto Sans Lao Looped (c) The Noto Project Authors, OFL.
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="phetsarath.css">
+ *   body { font-family: 'Phetsarath OT', sans-serif; }
+ * Keep the .woff2 files in the same directory as this stylesheet,
+ * or adjust the url() paths below.
+ */
+@font-face { font-family:'Phetsarath OT'; font-weight:300; font-style:normal; src:url('PhetsarathOT-Light.woff2') format('woff2'); font-display:swap; }
+@font-face { font-family:'Phetsarath OT'; font-weight:300; font-style:italic; src:url('PhetsarathOT-LightItalic.woff2') format('woff2'); font-display:swap; }
+@font-face { font-family:'Phetsarath OT'; font-weight:400; font-style:normal; src:url('PhetsarathOT-Regular.woff2') format('woff2'); font-display:swap; }
+@font-face { font-family:'Phetsarath OT'; font-weight:400; font-style:italic; src:url('PhetsarathOT-Italic.woff2') format('woff2'); font-display:swap; }
+@font-face { font-family:'Phetsarath OT'; font-weight:500; font-style:normal; src:url('PhetsarathOT-Medium.woff2') format('woff2'); font-display:swap; }
+@font-face { font-family:'Phetsarath OT'; font-weight:500; font-style:italic; src:url('PhetsarathOT-MediumItalic.woff2') format('woff2'); font-display:swap; }
+@font-face { font-family:'Phetsarath OT'; font-weight:600; font-style:normal; src:url('PhetsarathOT-SemiBold.woff2') format('woff2'); font-display:swap; }
+@font-face { font-family:'Phetsarath OT'; font-weight:600; font-style:italic; src:url('PhetsarathOT-SemiBoldItalic.woff2') format('woff2'); font-display:swap; }
+@font-face { font-family:'Phetsarath OT'; font-weight:700; font-style:normal; src:url('PhetsarathOT-Bold.woff2') format('woff2'); font-display:swap; }
+@font-face { font-family:'Phetsarath OT'; font-weight:700; font-style:italic; src:url('PhetsarathOT-BoldItalic.woff2') format('woff2'); font-display:swap; }
+@font-face { font-family:'Phetsarath OT'; font-weight:900; font-style:normal; src:url('PhetsarathOT-Black.woff2') format('woff2'); font-display:swap; }
+@font-face { font-family:'Phetsarath OT'; font-weight:900; font-style:italic; src:url('PhetsarathOT-BlackItalic.woff2') format('woff2'); font-display:swap; }

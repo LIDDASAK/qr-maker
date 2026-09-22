@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1000"
+   height="1000"
+   viewBox="0 0 1000 1000"
+   id="svg3051"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="qrcodemonkey.svg"
+   inkscape:export-filename="C:\xampp\htdocs\qrcodemonkey2017\img\qr\logos\qrcodemonkey.png"
+   inkscape:export-xdpi="9"
+   inkscape:export-ydpi="9">
+  <defs
+     id="defs3053">
+    <filter
+       inkscape:collect="always"
+       id="filter3892">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.92684299"
+         id="feGaussianBlur3894" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.43336283"
+     inkscape:cx="52.679802"
+     inkscape:cy="855.36465"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="2160"
+     inkscape:window-height="1377"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata3056">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-52.362183)">
+    <g
+       id="g3896"
+       transform="matrix(34.655983,0,0,34.655983,-1480.8823,-5718.0699)">
+      <path
+         style="opacity:0.58585857;fill:#535353;fill-opacity:1;fill-rule:nonzero;stroke:none;filter:url(#filter3892)"
+         d="m 57.142862,168.73051 c -6.73652,0 -12.18751,5.4509 -12.18751,12.1874 0,6.7366 5.45099,12.2188 12.18751,12.2188 2.34379,0 4.51628,-0.6979 6.375,-1.8438 l 2.53125,1.0313 1.34375,-3.25 -0.875,-0.375 c 1.75689,-2.1133 2.8125,-4.8182 2.8125,-7.7813 -0.002,-6.7347 -5.45274,-12.1874 -12.1875,-12.1874 z"
+         id="path19761"
+         inkscape:export-filename="C:\xampp\htdocs\qrcodemonkey2017\img\logo-qrcode-monkey.png"
+         inkscape:export-xdpi="313.66302"
+         inkscape:export-ydpi="313.66302"
+         inkscape:connector-curvature="0" />
+      <path
+         sodipodi:type="arc"
+         style="fill:#9acd32;fill-opacity:1;fill-rule:nonzero;stroke:#fefefe;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="path19775"
+         sodipodi:cx="-52.940647"
+         sodipodi:cy="2524.7212"
+         sodipodi:rx="20.602518"
+         sodipodi:ry="20.602518"
+         d="m -32.338129,2524.7212 c 0,11.3784 -9.224062,20.6025 -20.602518,20.6025 -11.378457,0 -20.602518,-9.2241 -20.602518,-20.6025 0,-11.3785 9.224061,-20.6025 20.602518,-20.6025 11.375509,0 20.59835,9.2194 20.602517,20.5949"
+         sodipodi:start="0"
+         sodipodi:end="6.282819"
+         sodipodi:open="true"
+         transform="matrix(0.59204073,0,0,0.59204073,88.4807,-1313.8134)"
+         inkscape:export-filename="C:\xampp\htdocs\qrcodemonkey2017\img\logo-qrcode-monkey.png"
+         inkscape:export-xdpi="313.66302"
+         inkscape:export-ydpi="313.66302" />
+      <path
+         sodipodi:type="arc"
+         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#9acd32;stroke-width:5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="path19777"
+         sodipodi:cx="-78.557526"
+         sodipodi:cy="2585.2454"
+         sodipodi:rx="25.448214"
+         sodipodi:ry="26.185843"
+         d="m -53.109312,2585.2454 c 0,14.462 -11.393553,26.1858 -25.448214,26.1858 -14.05466,0 -25.448214,-11.7238 -25.448214,-26.1858 0,-14.4621 11.393554,-26.1859 25.448214,-26.1859 14.05102,0 25.443065,11.718 25.448212,26.1763"
+         sodipodi:start="0"
+         sodipodi:end="6.282819"
+         sodipodi:open="true"
+         transform="matrix(0.29140568,0,0,0.29140568,80.082022,-573.6898)"
+         inkscape:export-filename="C:\xampp\htdocs\qrcodemonkey2017\img\logo-qrcode-monkey.png"
+         inkscape:export-xdpi="313.66302"
+         inkscape:export-ydpi="313.66302" />
+      <path
+         sodipodi:type="arc"
+         style="fill:#9acd32;fill-opacity:1;fill-rule:nonzero;stroke:#9acd32;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="path19779"
+         sodipodi:cx="-145.91277"
+         sodipodi:cy="2571.0117"
+         sodipodi:rx="4.3030577"
+         sodipodi:ry="5.867806"
+         d="m -141.60971,2571.0117 c 0,3.2407 -1.92654,5.8678 -4.30306,5.8678 -2.37651,0 -4.30305,-2.6271 -4.30305,-5.8678 0,-3.2407 1.92654,-5.8678 4.30305,-5.8678 2.3759,0 4.30219,2.6258 4.30306,5.8657"
+         sodipodi:start="0"
+         sodipodi:end="6.282819"
+         sodipodi:open="true"
+         transform="matrix(0.29140568,0,0,0.29140568,95.889202,-571.1059)"
+         inkscape:export-filename="C:\xampp\htdocs\qrcodemonkey2017\img\logo-qrcode-monkey.png"
+         inkscape:export-xdpi="313.66302"
+         inkscape:export-ydpi="313.66302" />
+      <path
+         sodipodi:type="arc"
+         style="fill:#9acd32;fill-opacity:1;fill-rule:nonzero;stroke:#9acd32;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="path19781"
+         sodipodi:cx="-145.91277"
+         sodipodi:cy="2571.0117"
+         sodipodi:rx="4.3030577"
+         sodipodi:ry="5.867806"
+         d="m -141.60971,2571.0117 c 0,3.2407 -1.92654,5.8678 -4.30306,5.8678 -2.37651,0 -4.30305,-2.6271 -4.30305,-5.8678 0,-3.2407 1.92654,-5.8678 4.30305,-5.8678 2.3759,0 4.30219,2.6258 4.30306,5.8657"
+         sodipodi:start="0"
+         sodipodi:end="6.282819"
+         sodipodi:open="true"
+         transform="matrix(0.29140568,0,0,0.29140568,103.45081,-571.0679)"
+         inkscape:export-filename="C:\xampp\htdocs\qrcodemonkey2017\img\logo-qrcode-monkey.png"
+         inkscape:export-xdpi="313.66302"
+         inkscape:export-ydpi="313.66302" />
+      <rect
+         style="fill:#9acd32;fill-opacity:1;fill-rule:nonzero;stroke:#9acd32;stroke-width:0.7330364;stroke-opacity:1"
+         id="rect19783"
+         width="7.8402834"
+         height="3.5146098"
+         x="125.90741"
+         y="149.6696"
+         transform="matrix(0.92606429,0.37736577,-0.37736577,0.92606429,0,0)"
+         inkscape:transform-center-x="-2.4332507"
+         inkscape:transform-center-y="3.1066423"
+         inkscape:export-filename="C:\xampp\htdocs\qrcodemonkey2017\img\logo-qrcode-monkey.png"
+         inkscape:export-xdpi="313.66302"
+         inkscape:export-ydpi="313.66302" />
+      <path
+         sodipodi:type="arc"
+         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#9acd32;stroke-width:5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="path19785"
+         sodipodi:cx="-77.819901"
+         sodipodi:cy="2614.3818"
+         sodipodi:rx="22.497696"
+         sodipodi:ry="21.391253"
+         d="m -55.322205,2614.3818 c 0,11.8141 -10.072561,21.3913 -22.497696,21.3913 -12.425134,0 -22.497699,-9.5772 -22.497699,-21.3913 0,-11.814 10.072565,-21.3912 22.497699,-21.3912 12.421917,0 22.493145,9.5724 22.497695,21.3834"
+         sodipodi:start="0"
+         sodipodi:end="6.282819"
+         sodipodi:open="true"
+         transform="matrix(0.29140568,0,0,0.29140568,79.867072,-577.5588)"
+         inkscape:export-filename="C:\xampp\htdocs\qrcodemonkey2017\img\logo-qrcode-monkey.png"
+         inkscape:export-xdpi="313.66302"
+         inkscape:export-ydpi="313.66302" />
+      <path
+         style="fill:#9acd32;fill-opacity:1;stroke:#9acd32;stroke-width:1.09955466;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="m 52.571432,184.59931 c 2.83719,0.4559 5.82637,0.3799 8.96754,0"
+         id="path19787"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cc"
+         inkscape:export-filename="C:\xampp\htdocs\qrcodemonkey2017\img\logo-qrcode-monkey.png"
+         inkscape:export-xdpi="313.66302"
+         inkscape:export-ydpi="313.66302" />
+    </g>
+  </g>
+</svg>
