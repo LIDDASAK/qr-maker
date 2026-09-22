@@ -217,6 +217,18 @@
       context.lineTo(left, top + size - pointedCut);
       context.lineTo(left, centerY);
       context.closePath();
+    } else if (/rounded-pointed/.test(style)) {
+      var pointedInset = moduleSize * 0.04;
+      var pointedLeft = left + pointedInset;
+      var pointedTop = top + pointedInset;
+      var pointedSize = Math.max(0, size - pointedInset * 2);
+      var pointedCenterX = pointedLeft + pointedSize / 2;
+      var pointedCenterY = pointedTop + pointedSize / 2;
+      context.moveTo(pointedCenterX, pointedTop);
+      context.lineTo(pointedLeft + pointedSize, pointedCenterY);
+      context.lineTo(pointedCenterX, pointedTop + pointedSize);
+      context.lineTo(pointedLeft, pointedCenterY);
+      context.closePath();
     } else if (/pointed/.test(style)) {
       context.moveTo(centerX, top);
       context.lineTo(left + size, centerY);
@@ -233,12 +245,6 @@
       context.lineTo(left + cut, top + size);
       context.lineTo(left, top + size - cut);
       context.lineTo(left, top + cut);
-      context.closePath();
-    } else if (/rounded-pointed/.test(style)) {
-      context.moveTo(centerX, top);
-      context.lineTo(left + size, centerY);
-      context.lineTo(centerX, top + size);
-      context.lineTo(left, centerY);
       context.closePath();
     } else if (/round|rounded|smooth|mosaic/.test(style)) {
       var roundedInset = moduleSize * 0.04;
@@ -369,9 +375,17 @@
       context.lineTo(left, top + cut);
       context.closePath();
     } else if (
-      /^frame5$|^frame8$|^frame11$|round|rounded|smooth|mosaic/.test(style)
+      /^frame4$|^frame5$|^frame7$|^frame8$|^frame10$|^frame11$|^frame13$|^frame14$|^frame16$|round|rounded|smooth|mosaic/.test(
+        style,
+      )
     ) {
       context.roundRect(left, top, size, size, radius);
+    } else if (
+      /^ball5$|^ball7$|^ball9$|^ball10$|^ball12$|^ball13$|^ball15$|^ball18$/.test(
+        style,
+      )
+    ) {
+      context.arc(centerX, centerY, size * 0.44, 0, Math.PI * 2);
     } else {
       context.rect(left, top, size, size);
     }
@@ -520,10 +534,31 @@
       scope.tempQrcode = window.angular.copy(scope.qrcode);
       scope.isLoading = false;
       scope.generateActive = true;
+      if (scope._qrPendingRefresh) {
+        scope._qrPendingRefresh = false;
+        window.setTimeout(function () {
+          scope.createLocalQr();
+        }, 0);
+      }
     });
   }
 
   function attach(scope) {
+    var refreshTimer = null;
+
+    function queueRefresh() {
+      scope.generateActive = true;
+      if (!qrCanvasDataUrl) return;
+      if (scope.isLoading) {
+        scope._qrPendingRefresh = true;
+        return;
+      }
+      window.clearTimeout(refreshTimer);
+      refreshTimer = window.setTimeout(function () {
+        scope.createLocalQr();
+      }, 120);
+    }
+
     scope.onLocalLogoSelect = function (files) {
       var file = files && files[0];
       if (!file || file.type.indexOf("image/") !== 0) return;
@@ -549,7 +584,7 @@
       var qrCodeConstructor =
         window.QRCode || (typeof QRCode !== "undefined" ? QRCode : null);
       if (scope.isLoading) {
-        scope.isLoading = false;
+        scope._qrPendingRefresh = true;
         return;
       }
       scope.isLoading = true;
@@ -599,7 +634,6 @@
     };
 
     var designReady = false;
-    var refreshTimer = null;
     scope.$watchGroup(
       [
         "qrcode.config.logo",
@@ -616,14 +650,11 @@
           designReady = true;
           return;
         }
-        scope.generateActive = true;
-        if (!qrCanvasDataUrl || scope.isLoading) return;
-        window.clearTimeout(refreshTimer);
-        refreshTimer = window.setTimeout(function () {
-          scope.createLocalQr();
-        }, 120);
+        queueRefresh();
       },
     );
+    scope.$watch("qrcode.data", queueRefresh, true);
+    scope.$watch("qrcode.type", queueRefresh);
   }
 
   var tries = 0;
