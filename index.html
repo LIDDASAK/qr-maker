@@ -27,6 +27,10 @@
     </script>
     <link rel="stylesheet" href="./fonts/PhetsarathOT/phetsarath.css" />
     <link rel="stylesheet" href="./dist/website.dist.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
     <style>
       html,
       body,
@@ -53,13 +57,243 @@
       [class*=" icon-"] {
         font-family: icomoon !important;
       }
+
+      .site-header {
+        width: 100%;
+        padding: 18px 24px 10px;
+        position: relative;
+        z-index: 5;
+      }
+
+      .site-header-inner {
+        max-width: 1100px;
+        min-height: 82px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .site-brand {
+        display: inline-flex;
+        align-items: center;
+        min-width: 0;
+      }
+
+      .site-brand img {
+        display: block;
+        width: 300px;
+        max-width: 100%;
+        height: auto;
+      }
+
+      .site-header-links {
+        display: flex;
+        align-items: center;
+        gap: 26px;
+      }
+
+      .site-header-links a {
+        color: #fff;
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .site-header-links a:hover {
+        opacity: 0.72;
+      }
+
+      .site-menu-toggle,
+      .site-mobile-menu {
+        display: none;
+      }
+
+      @media (max-width: 767px) {
+        .site-header {
+          padding: 14px 16px 8px;
+        }
+
+        .site-header-inner {
+          min-height: 60px;
+        }
+
+        .site-brand img {
+          width: 210px;
+        }
+
+        .site-header-links {
+          display: none;
+        }
+
+        .site-menu-toggle {
+          display: inline-flex;
+          position: relative;
+          z-index: 1002;
+          width: 44px;
+          height: 44px;
+          align-items: center;
+          justify-content: center;
+          padding: 0;
+          border: 1px solid rgba(255, 255, 255, 0.55);
+          border-radius: 50%;
+          color: #fff;
+          background: transparent;
+          cursor: pointer;
+        }
+
+        .site-menu-toggle i {
+          font-size: 1.25rem;
+        }
+
+        .site-mobile-menu {
+          position: fixed;
+          inset: 0;
+          z-index: 1001;
+          padding: 96px 24px 24px;
+          background: rgba(18, 35, 38, 0.88);
+        }
+
+        .site-mobile-menu.is-open {
+          display: block;
+        }
+
+        .site-mobile-menu-list {
+          display: grid;
+          gap: 8px;
+          max-width: 420px;
+          margin: 0 auto;
+        }
+
+        .site-mobile-menu-list a {
+          display: block;
+          padding: 16px 14px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+          color: #fff;
+          font-size: 0.95rem;
+          font-weight: 700;
+          text-align: center;
+          text-decoration: none;
+        }
+
+        .site-mobile-menu-list a:hover,
+        .site-mobile-menu-list a:focus {
+          color: #d9f2e0;
+          background: rgba(255, 255, 255, 0.08);
+          outline: 0;
+        }
+      }
+
+      .location-search {
+        position: relative;
+      }
+
+      .location-results {
+        position: absolute;
+        top: calc(100% - 1rem);
+        right: 0;
+        left: 0;
+        z-index: 1001;
+        margin: 0 15px;
+        padding: 0;
+        overflow: hidden;
+        list-style: none;
+        border: 1px solid #d7e0e6;
+        border-radius: 0 0 5px 5px;
+        background: #fff;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+      }
+
+      .location-results li button {
+        display: block;
+        width: 100%;
+        padding: 10px 14px;
+        border: 0;
+        background: #fff;
+        color: #4c5961;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .location-results li button:hover,
+      .location-results li button:focus {
+        background: #eef6fb;
+        outline: 0;
+      }
     </style>
   </head>
   <body>
     <div class="background"></div>
     <div class="wrapper" ng-controller="MainCtrl">
+      <header class="site-header" aria-label="Site header">
+        <div class="site-header-inner">
+          <a
+            class="site-brand"
+            href="https://www.qrcode-monkey.com/"
+            title="QR Code Maker"
+          >
+            <img
+              src="./img/company-logo.png?v=20260923-1"
+              alt="Phan Liddasak"
+            />
+          </a>
+          <nav class="site-header-links" aria-label="Header links">
+            <a href="https://www.qrcode-monkey.com/">QR CODE MAKER</a>
+            <a
+              href="https://www.phanliddasak.com/"
+              target="_blank"
+              rel="noopener"
+              >WEBSITE</a
+            >
+          </nav>
+          <button
+            class="site-menu-toggle"
+            type="button"
+            ng-click="mobileHeaderMenuOpen = !mobileHeaderMenuOpen"
+            ng-attr-aria-expanded="{{mobileHeaderMenuOpen ? 'true' : 'false'}}"
+            aria-label="Open menu"
+          >
+            <i
+              class="fa"
+              ng-class="mobileHeaderMenuOpen ? 'fa-times' : 'fa-bars'"
+              aria-hidden="true"
+            ></i>
+          </button>
+        </div>
+        <div
+          class="site-mobile-menu"
+          ng-class="{'is-open': mobileHeaderMenuOpen}"
+          ng-click="mobileHeaderMenuOpen = false"
+        >
+          <nav
+            class="site-mobile-menu-list"
+            aria-label="Mobile header menu"
+            ng-click="$event.stopPropagation()"
+          >
+            <a
+              href="https://www.qrcode-monkey.com/"
+              target="_blank"
+              rel="noopener"
+              ng-click="mobileHeaderMenuOpen = false"
+              >QR CODE MAKER</a
+            >
+            <a
+              href="https://www.phanliddasak.com/"
+              target="_blank"
+              rel="noopener"
+              ng-click="mobileHeaderMenuOpen = false"
+              >WEBSITE</a
+            >
+          </nav>
+        </div>
+      </header>
       <div class="qrcode-generator" ng-controller="GeneratorCtrl">
-        <div class="type-bar" ng-class="{'menu-open': moreMenuOpen}">
+        <div
+          class="type-bar"
+          ng-class="{'menu-open': moreMenuOpen || socialMenuOpen}"
+        >
           <div class="scroll-left">
             <!-- <i class="fa fa-chevron-left"></i>-->
           </div>
@@ -132,52 +366,6 @@
               >Location</a
             >
 
-            <ul class="tabsocial">
-              <li>
-                <a
-                  href="#social"
-                  class="tab"
-                  ng-class="{'active': qrcode.type==='social'}"
-                  ng-click="openModal('types', 'social')"
-                  title="Mocial solutions"
-                >
-                  SOCIAL MEDIA
-                </a>
-                <ul>
-                  <li>
-                    <a
-                      href="#facebook"
-                      class="tab"
-                      ng-class="{'active': qrcode.type==='facebook'}"
-                      ng-click="setTab('facebook')"
-                      title="Create QR Code for Facebook"
-                      >Create Facebook</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      href="#twitter"
-                      class="tab"
-                      ng-class="{'active': qrcode.type==='twitter'}"
-                      ng-click="setTab('twitter')"
-                      title="Create QR Code for Twitter"
-                      >Create Twitter
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#youtube"
-                      class="tab"
-                      ng-class="{'active': qrcode.type==='youtube'}"
-                      ng-click="setTab('youtube')"
-                      title="Create QR code for Youtube"
-                      >Create Youtube</a
-                    >
-                  </li>
-                </ul>
-              </li>
-            </ul>
-
             <!-----------------------------------------------------------------------------------
             <a
               href="#facebook"
@@ -248,7 +436,13 @@
                     <a href="qr2.html">Create QR 2</a>
                   </li>
                   <li>
-                    <a href="https://www.phanliddasak.com/">PDF</a>
+                    <a href="qr3.html">QR Workspace</a>
+                  </li>
+                  <li>
+                    <a href="qr4.html">Location QR Code</a>
+                  </li>
+                  <li>
+                    <a href="https://www.ilovepdf.com/">ແກ້ PDF</a>
                   </li>
                   <li>
                     <a href="http://m.me/100011043886191">Messenger</a>
@@ -978,16 +1172,28 @@
                           ng-submit="qrcodeGenerator()"
                           novalidate=""
                         >
-                          <div class="form-group">
+                          <div class="form-group location-search">
                             <label>Search Your Address</label>
                             <input
+                              id="location-address-search"
                               class="form-control"
-                              ng-change="setLocation()"
-                              g-places-autocomplete
                               ng-model="mapsSearch"
-                              placeholder="5th Avenue, Vientian Laos..."
+                              placeholder="Patuxai, Vientiane, Laos ..."
                               type="text"
                             />
+                            <ul
+                              class="location-results"
+                              ng-if="locationSearchResults.length"
+                            >
+                              <li ng-repeat="result in locationSearchResults">
+                                <button
+                                  type="button"
+                                  ng-click="selectLocationResult(result)"
+                                >
+                                  {{result.display_name}}
+                                </button>
+                              </li>
+                            </ul>
                           </div>
                           <div class="row">
                             <div class="col-sm-6">
@@ -1826,7 +2032,8 @@
                             {type: 'share-circle'}, {type: 'wifi-circle'}
                           ]},
                           {title: 'Other', logos: [
-                            {type: 'qrcodemonkey'}, {type: 'bitcoin'}
+                            {type: 'qrcodemonkey'}, {type: 'bitcoin'},
+                            {type: 'LAO_QR_Logo'}, {type: 'Lep-Net-logo'}
                           ]}
                         ]"
                       >
@@ -1844,9 +2051,11 @@
                                 ng-repeat="logo in group.logos"
                                 title="{{logo.type}}"
                               >
-                                <i
-                                  class="sprite-logo sprite-logo-{{logo.type}}"
-                                ></i>
+                                <img
+                                  class="logo-option-image"
+                                  ng-src="./img/qr/logos/{{logo.type}}.svg?v=20260923-1"
+                                  alt="{{logo.type}} logo"
+                                />
                               </div>
                             </div>
                           </div>
@@ -1936,7 +2145,12 @@
                   </div>
 
                   <div class="row bottom-options">
-                    <a href="#" ng-click="openModal('print')">
+                    <a
+                      href="https://www.phanliddasak.com/p/contact.html"
+                      target="_blank"
+                      rel="noopener"
+                      ng-click="openModal('print')"
+                    >
                       <strong>ສ້າງໂດຍ:</strong>Phan Liddasak.
                     </a>
                   </div>
@@ -2085,6 +2299,8 @@
     <script src="./dist/website.dist.js?v=20260923-4"></script>
     <script src="./vendor/qrcode.min.js?v=20260923"></script>
     <script src="./local-qr.js?v=20260923-9"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="./map-enhancer.js?v=20260924-1"></script>
 
     <script type="text/javascript">
       /**

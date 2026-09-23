@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="lo">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Location QR Workspace</title>
+    <link rel="stylesheet" href="./fonts/PhetsarathOT/phetsarath.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <style>
+      :root {
+        --green: #23834f;
+        --ink: #17324d;
+        --muted: #6d7d8c;
+        --line: #d8e1e7;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        color: var(--ink);
+        font-family: "Phetsarath OT", sans-serif;
+        background: linear-gradient(135deg, #1b7e4e 0 32%, #e9f0f4 32% 100%);
+      }
+      .topbar {
+        max-width: 1180px;
+        margin: auto;
+        padding: 22px 24px 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .brand img {
+        width: 230px;
+        display: block;
+      }
+      .topbar a {
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .page {
+        max-width: 1180px;
+        margin: auto;
+        padding: 18px 24px 60px;
+      }
+      .shell {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 330px;
+        overflow: hidden;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 18px 50px #0f27342e;
+      }
+      .content {
+        padding: 30px;
+      }
+      h1 {
+        margin: 0 0 5px;
+        font-size: 25px;
+      }
+      .intro {
+        margin: 0 0 22px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      label {
+        display: block;
+        margin-bottom: 7px;
+        color: #586b79;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      input {
+        width: 100%;
+        height: 44px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        font: inherit;
+      }
+      input:focus {
+        border-color: #40a9d8;
+        outline: 3px solid #40a9d82b;
+      }
+      .search {
+        position: relative;
+        margin-bottom: 16px;
+      }
+      .results {
+        position: absolute;
+        top: 74px;
+        right: 0;
+        left: 0;
+        z-index: 1100;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        list-style: none;
+        border: 1px solid var(--line);
+        border-radius: 0 0 5px 5px;
+        background: #fff;
+        box-shadow: 0 8px 20px #0000001f;
+      }
+      .results button {
+        width: 100%;
+        padding: 11px 14px;
+        border: 0;
+        color: #4c5961;
+        background: #fff;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+      }
+      .results button:hover {
+        background: #eef6fb;
+      }
+      #map {
+        height: 360px;
+        margin: 16px 0;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+      .coords {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+      }
+      .action {
+        min-height: 42px;
+        padding: 0 18px;
+        border: 0;
+        border-radius: 4px;
+        color: #fff;
+        background: var(--green);
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .action.secondary {
+        color: #159ad4;
+        background: #e4f5fc;
+      }
+      .preview {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        border-left: 1px solid var(--line);
+        background: #fbfcfd;
+      }
+      .preview h2 {
+        align-self: flex-start;
+        margin: 0 0 18px;
+        font-size: 17px;
+      }
+      #qr {
+        width: 260px;
+        height: 260px;
+        max-width: 100%;
+        image-rendering: pixelated;
+      }
+      .status {
+        min-height: 20px;
+        margin-top: 10px;
+        color: #b34141;
+        font-size: 12px;
+      }
+      @media (max-width: 800px) {
+        .shell {
+          grid-template-columns: 1fr;
+        }
+        .preview {
+          border-top: 1px solid var(--line);
+          border-left: 0;
+        }
+        .content {
+          padding: 22px;
+        }
+      }
+      @media (max-width: 520px) {
+        .topbar {
+          padding: 15px 16px;
+        }
+        .brand img {
+          width: 190px;
+        }
+        .topbar a {
+          display: none;
+        }
+        .page {
+          padding: 8px 12px 36px;
+        }
+        .coords {
+          grid-template-columns: 1fr;
+        }
+        #map {
+          height: 300px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./index.html"
+        ><img
+          src="./img/company-logo.png?v=20260923-1"
+          alt="Phan Liddasak" /></a
+      ><a href="./index.html">QR CODE MAKER</a>
+    </header>
+    <main class="page">
+      <section class="shell">
+        <div class="content">
+          <h1>Location QR Code</h1>
+          <p class="intro">
+            Find a place or choose a point on the map to create a location QR
+            code.
+          </p>
+          <div class="search">
+            <label for="address">Search Your Address</label
+            ><input
+              id="address"
+              placeholder="700 Whitehorse Rd, Mitcham VIC 3132, Australia"
+              autocomplete="off"
+            />
+            <ul id="results" class="results"></ul>
+          </div>
+          <div id="map"></div>
+          <div class="coords">
+            <div>
+              <label for="latitude">Latitude</label
+              ><input id="latitude" type="number" step="0.000001" />
+            </div>
+            <div>
+              <label for="longitude">Longitude</label
+              ><input id="longitude" type="number" step="0.000001" />
+            </div>
+          </div>
+          <div class="actions">
+            <button class="action" id="generate">Generate QR Code</button
+            ><button class="action secondary" id="download" disabled>
+              Download PNG
+            </button>
+          </div>
+          <div id="status" class="status" role="status"></div>
+        </div>
+        <aside class="preview">
+          <h2>Live preview</h2>
+          <canvas id="qr" width="500" height="500"></canvas>
+        </aside>
+      </section>
+    </main>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      (function () {
+        var coordinates = { lat: 17.97064, lng: 102.618607 },
+          map = L.map("map").setView([coordinates.lat, coordinates.lng], 13),
+          marker = L.marker([coordinates.lat, coordinates.lng], {
+            draggable: true,
+          }).addTo(map),
+          address = document.getElementById("address"),
+          results = document.getElementById("results"),
+          latInput = document.getElementById("latitude"),
+          lngInput = document.getElementById("longitude"),
+          canvas = document.getElementById("qr"),
+          download = document.getElementById("download"),
+          status = document.getElementById("status");
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "&copy; OpenStreetMap contributors",
+          maxZoom: 19,
+        }).addTo(map);
+        function setCoordinates(lat, lng, center) {
+          coordinates.lat = Number(Number(lat).toFixed(6));
+          coordinates.lng = Number(Number(lng).toFixed(6));
+          latInput.value = coordinates.lat;
+          lngInput.value = coordinates.lng;
+          marker.setLatLng([coordinates.lat, coordinates.lng]);
+          if (center) map.setView([coordinates.lat, coordinates.lng], 16);
+          generate();
+        }
+        function getData() {
+          return "geo:" + coordinates.lat + "," + coordinates.lng;
+        }
+        function render() {
+          var holder = document.createElement("div"),
+            source;
+          try {
+            source = new Function("return " + arguments[0] + ";")();
+          } catch (error) {}
+          return source;
+        }
+        function loadQr() {
+          return fetch("./vendor/qrcode.min.js")
+            .then(function (response) {
+              return response.text();
+            })
+            .then(function (source) {
+              return new Function(source + "\nreturn QRCode;")();
+            });
+        }
+        function generate() {
+          status.textContent = "";
+          loadQr()
+            .then(function (Constructor) {
+              var holder = document.createElement("div");
+              new Constructor(holder, {
+                text: getData(),
+                width: 500,
+                height: 500,
+                colorDark: "#17324d",
+                colorLight: "#ffffff",
+                correctLevel: Constructor.CorrectLevel.H,
+              });
+              window.setTimeout(function () {
+                var source = holder.querySelector("canvas,img");
+                if (!source) {
+                  status.textContent = "Could not generate QR code.";
+                  return;
+                }
+                canvas.getContext("2d").clearRect(0, 0, 500, 500);
+                canvas.getContext("2d").drawImage(source, 0, 0, 500, 500);
+                download.disabled = false;
+              }, 60);
+            })
+            .catch(function () {
+              status.textContent = "Could not generate QR code.";
+              download.disabled = true;
+            });
+        }
+        function search() {
+          var query = address.value.trim();
+          if (query.length < 3) {
+            results.innerHTML = "";
+            return;
+          }
+          fetch(
+            "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&q=" +
+              encodeURIComponent(query),
+            { headers: { Accept: "application/json" } },
+          )
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (items) {
+              results.innerHTML = items
+                .map(function (item) {
+                  return (
+                    '<li><button type="button" data-lat="' +
+                    item.lat +
+                    '" data-lng="' +
+                    item.lon +
+                    '">' +
+                    item.display_name +
+                    "</button></li>"
+                  );
+                })
+                .join("");
+            });
+        }
+        address.addEventListener("input", function () {
+          clearTimeout(address.timer);
+          address.timer = setTimeout(search, 350);
+        });
+        results.addEventListener("click", function (event) {
+          var button = event.target.closest("button");
+          if (!button) return;
+          address.value = button.textContent;
+          results.innerHTML = "";
+          setCoordinates(button.dataset.lat, button.dataset.lng, true);
+        });
+        marker.on("dragend", function () {
+          var point = marker.getLatLng();
+          setCoordinates(point.lat, point.lng, false);
+        });
+        map.on("click", function (event) {
+          setCoordinates(event.latlng.lat, event.latlng.lng, false);
+        });
+        latInput.addEventListener("change", function () {
+          setCoordinates(latInput.value, lngInput.value, true);
+        });
+        lngInput.addEventListener("change", function () {
+          setCoordinates(latInput.value, lngInput.value, true);
+        });
+        generate();
+        setCoordinates(coordinates.lat, coordinates.lng, false);
+        window.setTimeout(function () {
+          map.invalidateSize();
+        }, 300);
+        download.addEventListener("click", function () {
+          var link = document.createElement("a");
+          link.download = "location-qr.png";
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+        });
+      })();
+    </script>
+  </body>
+</html>

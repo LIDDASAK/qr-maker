@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Code Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6">
+      <h1 class="text-2xl font-bold text-center mb-4">
+        ສ້າງ QR Code ຕ່າງໆໄດ້ທີ່ນີ່
+      </h1>
+
+      <!-- เลือกประเภท QR -->
+      <div class="mb-4">
+        <label class="block mb-2 font-semibold"
+          >ເລືອກໝວດໝູ່ທີ່ຈະສ້າງ Qr Code</label
+        >
+        <select id="qrType" class="w-full border p-2 rounded">
+          <option value="url">URL</option>
+          <option value="text">Text</option>
+          <option value="email">Email</option>
+          <option value="phone">Phone</option>
+          <option value="sms">SMS</option>
+          <option value="wifi">WiFi</option>
+          <option value="vcard">VCard</option>
+          <option value="location">Location</option>
+          <option value="youtube">YouTube</option>
+        </select>
+      </div>
+
+      <!-- กล่องกรอกข้อมูล -->
+      <div class="mb-4">
+        <label class="block mb-2 font-semibold"
+          >ໃສ່ເນືອຫາຂໍ້ຄວາມ ຫຼື ລິງຂອງທ່ານ</label
+        >
+        <textarea
+          id="qrContent"
+          rows="3"
+          class="w-full border p-2 rounded"
+          placeholder="Enter your text, URL, phone..."
+        ></textarea>
+      </div>
+
+      <!-- ปุ่ม -->
+      <button
+        onclick="generateQR()"
+        class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+      >
+        ສ້າງ/Generate QR Code
+      </button>
+
+      <!-- แสดงผล -->
+      <div class="text-center mt-6">
+        <canvas id="qrCanvas" class="mx-auto"></canvas>
+        <a
+          id="downloadLink"
+          class="mt-4 block text-blue-600 underline hidden"
+          download="qrcode.png"
+          >Download QR Code</a
+        >
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script>
+      async function generateQR() {
+        const type = document.getElementById("qrType").value;
+        const content = document.getElementById("qrContent").value;
+        const canvas = document.getElementById("qrCanvas");
+        const link = document.getElementById("downloadLink");
+
+        if (!content) {
+          alert("Please enter some content!");
+          return;
+        }
+
+        // สร้างเนื้อหา QR ตามประเภท
+        let qrData = content;
+        if (type === "email") qrData = `mailto:${content}`;
+        else if (type === "phone") qrData = `tel:${content}`;
+        else if (type === "sms") qrData = `sms:${content}`;
+        else if (type === "wifi")
+          qrData = `WIFI:T:WPA;S:${content};P:password;;`;
+        else if (type === "youtube")
+          qrData = `https://youtube.com/watch?v=${content}`;
+        else if (type === "location") qrData = `geo:${content}`;
+
+        // generate QR
+        QRCode.toCanvas(canvas, qrData, { width: 250 }, function (error) {
+          if (error) console.error(error);
+          else {
+            link.href = canvas.toDataURL("image/png");
+            link.classList.remove("hidden");
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

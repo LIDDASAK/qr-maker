@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qr-code-styling/lib/qr-code-styling.js"></script>
+  </head>
+  <body class="bg-gray-100 flex justify-center items-center min-h-screen">
+    <div class="bg-white shadow-xl rounded-2xl p-6 w-full max-w-3xl">
+      <h1 class="text-2xl font-bold text-center mb-6">
+        ສ້າງ QR Code ຂອງທ່ານໄດ້ທີ່ນີ່
+      </h1>
+
+      <!-- Content input -->
+      <label class="block mb-2 font-semibold"
+        >ໃສ່ຂໍ້ມູນຂອງທ່ານ/Enter Content</label
+      >
+      <textarea
+        id="qrContent"
+        rows="3"
+        class="w-full border rounded p-2 mb-4"
+        placeholder="Enter text, URL, phone..."
+      ></textarea>
+
+      <!-- Color Options -->
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block font-semibold">ເລືອກສີ/Color</label>
+          <input
+            type="color"
+            id="colorDark"
+            value="#000000"
+            class="w-full h-10 rounded"
+          />
+        </div>
+        <div>
+          <label class="block font-semibold">ສີພື້ນຫຼັງ/Background</label>
+          <input
+            type="color"
+            id="colorLight"
+            value="#ffffff"
+            class="w-full h-10 rounded"
+          />
+        </div>
+      </div>
+
+      <!-- Logo upload -->
+      <div class="mb-4">
+        <label class="block font-semibold">ໃສ່ໂລໂກ້/Add Logo</label>
+        <input type="file" id="logoUpload" accept="image/*" class="w-full" />
+      </div>
+
+      <!-- Shape -->
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block font-semibold">ຮູບຮ່າງເມັດ/Dot Shape</label>
+          <select id="dotStyle" class="w-full border rounded p-2">
+            <option value="square">ສີ່ລ່ຽມ/Square</option>
+            <option value="dots">ຈ້ຳເປັນເມັດ/Dots</option>
+            <option value="rounded">ສີ່ລ່ຽມກົມ/</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold">ຮູບຮ່າງວົງໃຫຍ່/Corner Shape</label>
+          <select id="cornerStyle" class="w-full border rounded p-2">
+            <option value="square">ສີ່ລ່ຽມ/Square</option>
+            <option value="extra-rounded">ສີ່ລ່ຽມກົມ/Extra Rounded</option>
+            <option value="dot">ຈ້ຳເປັນເມັດ/Dot</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex gap-2 mb-6">
+        <button
+          onclick="updateQR()"
+          class="flex-1 bg-blue-600 text-white p-2 rounded"
+        >
+          ກົດສ້າງ/Generate QR
+        </button>
+        <button
+          onclick="downloadQR('png')"
+          class="flex-1 bg-green-600 text-white p-2 rounded"
+        >
+          ດາວໂຫຼດ/Download PNG
+        </button>
+        <button
+          onclick="downloadQR('svg')"
+          class="flex-1 bg-purple-600 text-white p-2 rounded"
+        >
+          ດາວໂຫຼດ/Download SVG
+        </button>
+      </div>
+
+      <!-- QR Preview -->
+      <div id="qrPreview" class="flex justify-center"></div>
+    </div>
+
+    <script>
+      // สร้าง instance
+      const qrCode = new QRCodeStyling({
+        width: 250,
+        height: 250,
+        data: "Hello world",
+        dotsOptions: { color: "#000000", type: "square" },
+        backgroundOptions: { color: "#ffffff" },
+        cornersSquareOptions: { type: "square" },
+      });
+
+      qrCode.append(document.getElementById("qrPreview"));
+
+      // update function
+      function updateQR() {
+        const content =
+          document.getElementById("qrContent").value || "https://example.com";
+        const colorDark = document.getElementById("colorDark").value;
+        const colorLight = document.getElementById("colorLight").value;
+        const dotStyle = document.getElementById("dotStyle").value;
+        const cornerStyle = document.getElementById("cornerStyle").value;
+        const logoFile = document.getElementById("logoUpload").files[0];
+
+        const options = {
+          data: content,
+          dotsOptions: { color: colorDark, type: dotStyle },
+          backgroundOptions: { color: colorLight },
+          cornersSquareOptions: { type: cornerStyle },
+        };
+
+        if (logoFile) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            options.image = e.target.result;
+            qrCode.update(options);
+          };
+          reader.readAsDataURL(logoFile);
+        } else {
+          options.image = null;
+          qrCode.update(options);
+        }
+      }
+
+      function downloadQR(format) {
+        qrCode.download({ name: "qrcode", extension: format });
+      }
+    </script>
+  </body>
+</html>
