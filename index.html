@@ -16,6 +16,15 @@
       content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width"
     />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <script>
+      if (window.location.protocol === "file:") {
+        window.location.replace(
+          "http://127.0.0.1:5500/" +
+            window.location.search +
+            window.location.hash,
+        );
+      }
+    </script>
     <link rel="stylesheet" href="./fonts/PhetsarathOT/phetsarath.css" />
     <link rel="stylesheet" href="./dist/website.dist.css" />
     <style>
@@ -1883,7 +1892,7 @@
                             ng-repeat="body in PresetService.designOptions.body"
                           >
                             <img
-                              ng-src="./img/qr/body/{{body.type}}.png"
+                              ng-src="./img/qr/body/{{('0' + ($index + 1)).slice(-2)}}.{{body.type}}.png"
                               alt="{{body.type}} body shape"
                             />
                           </div>
@@ -1900,7 +1909,7 @@
                             ng-repeat="frame in PresetService.designOptions.eyeFrames"
                           >
                             <img
-                              ng-src="./img/qr/eye-frames/{{frame.type}}.png"
+                              ng-src="./img/qr/eye-frames/{{('0' + ($index + 1)).slice(-2)}}.{{frame.type}}.png"
                               alt="{{frame.type}} eye frame"
                             />
                           </div>
@@ -1917,7 +1926,7 @@
                             ng-repeat="ball in PresetService.designOptions.eyeBalls"
                           >
                             <img
-                              ng-src="./img/qr/eye-balls/{{ball.type}}.png"
+                              ng-src="./img/qr/eye-balls/{{('0' + ($index + 1)).slice(-2)}}.{{ball.type}}.png"
                               alt="{{ball.type}} eye ball"
                             />
                           </div>
@@ -1994,10 +2003,10 @@
                     <button
                       type="button"
                       title="Generate QR code preview"
-                      ng-click="createLocalQr()"
+                      ng-click="qrcodeGenerator()"
                       id="button-create-qr-code"
                       class="btn btn-success"
-                      ng-disabled="isLoading || !generateActive || logoUploadPending"
+                      ng-disabled="isLoading || logoUploadPending"
                     >
                       <!--<i class="fa fa-refresh"></i>-->
                       Create QR Code
@@ -2071,12 +2080,11 @@
 
     <script>
       window.GLOBAL_API_ENDPOINT = "";
-      window.QR_API_PROXY =
-        window.location.port === "8787" ? "/api/qr/custom" : "";
+      window.QR_API_PROXY = "";
     </script>
-    <script src="./dist/website.dist.js?v=20260923"></script>
+    <script src="./dist/website.dist.js?v=20260923-4"></script>
     <script src="./vendor/qrcode.min.js?v=20260923"></script>
-    <script src="./local-qr.js?v=20260923"></script>
+    <script src="./local-qr.js?v=20260923-9"></script>
 
     <script type="text/javascript">
       /**

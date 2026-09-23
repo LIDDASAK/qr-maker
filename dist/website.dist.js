@@ -23857,6 +23857,10 @@ function analyticsEvent(e, t, n) {
       }),
       (o.qrcodeGenerator = function () {
         var e, t;
+        if (window.localQrGenerate) {
+          window.localQrGenerate(o);
+          return;
+        }
         ((o.currentForm = o[o.qrcode.type + "Form"]),
           o.logoUploadPending ||
             o.isLoading ||

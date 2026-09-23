@@ -6,13 +6,31 @@
   var maxLogoSize = 2 * 1024 * 1024;
   var apiEndpoint = window.QR_API_PROXY || "";
 
+  function isFileMode() {
+    return window.location.protocol === "file:";
+  }
+
+  function getAngular() {
+    return window.angular || (typeof angular !== "undefined" ? angular : null);
+  }
+
   function findScope() {
-    var element = document.querySelector(".qrcode-generator");
-    return element && window.angular && window.angular.element(element).scope();
+    var angularApi = getAngular();
+    if (!angularApi) return null;
+    var elements = document.querySelectorAll(
+      ".qrcode-generator, [ng-controller='GeneratorCtrl']",
+    );
+    for (var index = 0; index < elements.length; index += 1) {
+      var angularElement = angularApi.element(elements[index]);
+      var scope = angularElement.scope() || angularElement.isolateScope();
+      if (scope) return scope;
+    }
+    return null;
   }
 
   function digest(scope, callback) {
-    scope.$evalAsync(callback || window.angular.noop);
+    var angularApi = getAngular();
+    scope.$evalAsync(callback || (angularApi && angularApi.noop));
   }
 
   function getQrText(scope) {
@@ -22,6 +40,7 @@
   function getLogoSource(scope) {
     var logo = scope.qrcode.config.logo || "";
     if (logo.charAt(0) === "#") {
+      if (isFileMode()) return "";
       return "./img/qr/logos/" + logo.slice(1) + ".svg";
     }
     return logoDataUrl;
@@ -281,6 +300,130 @@
     var centerX = left + size / 2;
     var centerY = top + size / 2;
     var radius = size * (/frame(1|4|7|10|13|14|16)/.test(style) ? 0.18 : 0.3);
+    if (/^frame(4|7|8|10|11|16)$/.test(style)) {
+      var dotSize =
+        size *
+        (style === "frame10" ? 0.11 : style === "frame11" ? 0.075 : 0.055);
+      var dotRadius = Math.max(1, dotSize / 2);
+      var dotCount = style === "frame16" ? 8 : 12;
+      context.save();
+      context.fillStyle = context.fillStyle;
+      for (var dotIndex = 0; dotIndex < dotCount; dotIndex += 1) {
+        var dotPosition = (dotIndex + 0.5) / dotCount;
+        [
+          [left + dotPosition * size, top + dotRadius],
+          [left + size - dotRadius, top + dotPosition * size],
+          [left + (1 - dotPosition) * size, top + size - dotRadius],
+          [left + dotRadius, top + (1 - dotPosition) * size],
+        ].forEach(function (point) {
+          context.beginPath();
+          context.arc(point[0], point[1], dotRadius, 0, Math.PI * 2);
+          context.fill();
+        });
+      }
+      context.restore();
+      return;
+    }
+    if (style === "frame6") {
+      var frameCut = size * 0.22;
+      context.beginPath();
+      context.moveTo(left + frameCut, top);
+      context.lineTo(left + size - frameCut, top);
+      context.lineTo(left + size, top + frameCut);
+      context.lineTo(left + size, top + size - frameCut);
+      context.lineTo(left + size - frameCut, top + size);
+      context.lineTo(left + frameCut, top + size);
+      context.lineTo(left, top + size - frameCut);
+      context.lineTo(left, top + frameCut);
+      context.closePath();
+      context.fill();
+      return;
+    }
+    if (style === "frame14") {
+      context.beginPath();
+      context.moveTo(left + size * 0.08, top);
+      context.lineTo(left + size, top + size * 0.08);
+      context.lineTo(left + size * 0.92, top + size);
+      context.lineTo(left, top + size * 0.92);
+      context.closePath();
+      context.fill();
+      return;
+    }
+    if (style === "frame1" || style === "frame2") {
+      var cornerRadius = size * 0.34;
+      var roundLeft = style === "frame1";
+      context.beginPath();
+      if (roundLeft) {
+        context.moveTo(left + cornerRadius, top);
+        context.lineTo(left + size, top);
+        context.lineTo(left + size, top + size - cornerRadius);
+        context.quadraticCurveTo(
+          left + size,
+          top + size,
+          left + size - cornerRadius,
+          top + size,
+        );
+        context.lineTo(left, top + size);
+        context.lineTo(left, top + cornerRadius);
+        context.quadraticCurveTo(left, top, left + cornerRadius, top);
+      } else {
+        context.moveTo(left, top);
+        context.lineTo(left + size - cornerRadius, top);
+        context.quadraticCurveTo(
+          left + size,
+          top,
+          left + size,
+          top + cornerRadius,
+        );
+        context.lineTo(left + size, top + size);
+        context.lineTo(left + cornerRadius, top + size);
+        context.quadraticCurveTo(
+          left,
+          top + size,
+          left,
+          top + size - cornerRadius,
+        );
+        context.closePath();
+      }
+      context.closePath();
+      context.fill();
+      return;
+    }
+    if (style === "frame5") {
+      context.beginPath();
+      context.moveTo(left + size * 0.28, top);
+      context.lineTo(left + size * 0.76, top);
+      context.quadraticCurveTo(
+        left + size,
+        top,
+        left + size,
+        top + size * 0.24,
+      );
+      context.lineTo(left + size, top + size * 0.72);
+      context.quadraticCurveTo(
+        left + size,
+        top + size,
+        left + size * 0.72,
+        top + size,
+      );
+      context.lineTo(left + size * 0.28, top + size);
+      context.quadraticCurveTo(
+        left,
+        top + size,
+        left + size * 0.08,
+        top + size * 0.72,
+      );
+      context.lineTo(left + size * 0.16, top + size * 0.24);
+      context.quadraticCurveTo(
+        left + size * 0.18,
+        top,
+        left + size * 0.28,
+        top,
+      );
+      context.closePath();
+      context.fill();
+      return;
+    }
     if (style === "ball3") {
       var originalBall3 = new Path2D(
         "M100.061,99.984V0h-100l0.028,72.369C0.088,87.602,12.27,100,27.226,100h45.528c4.682,0,11.508,0,17.171-0.016C95.574,99.984,100.061,99.984,100.061,99.984z",
@@ -392,6 +535,132 @@
     context.fill();
   }
 
+  function isFinderModule(row, column, moduleCount) {
+    return (
+      (row < 7 && column < 7) ||
+      (row < 7 && column >= moduleCount - 7) ||
+      (row >= moduleCount - 7 && column < 7)
+    );
+  }
+
+  function getEyeFrameAssetPath(style) {
+    var frameFiles = {
+      frame0: "01.frame0.png",
+      frame1: "02.frame1.png",
+      frame2: "03.frame2.png",
+      frame3: "04.frame3.png",
+      frame4: "05.frame4.png",
+      frame5: "06.frame5.png",
+      frame6: "07.frame6.png",
+      frame7: "08.frame7.png",
+      frame8: "09.frame8.png",
+      frame10: "10.frame10.png",
+      frame11: "11.frame11.png",
+      frame12: "12.frame12.png",
+      frame13: "13.frame13.png",
+      frame14: "14.frame14.png",
+      frame16: "15.frame16.png",
+    };
+    return frameFiles[style] ? "./img/qr/eye-frames/" + frameFiles[style] : "";
+  }
+
+  function getEyeBallAssetPath(style) {
+    var ballFiles = {
+      ball0: "01.ball0.png",
+      ball1: "02.ball1.png",
+      ball2: "03.ball2.png",
+      ball3: "04.ball3.png",
+      ball5: "05.ball5.png",
+      ball6: "06.ball6.png",
+      ball7: "07.ball7.png",
+      ball8: "08.ball8.png",
+      ball10: "09.ball10.png",
+      ball11: "10.ball11.png",
+      ball12: "11.ball12.png",
+      ball13: "12.ball13.png",
+      ball14: "13.ball14.png",
+      ball15: "14.ball15.png",
+      ball16: "15.ball16.png",
+      ball17: "16.ball17.png",
+      ball18: "17.ball18.png",
+      ball19: "18.ball19.png",
+    };
+    return ballFiles[style] ? "./img/qr/eye-balls/" + ballFiles[style] : "";
+  }
+
+  function loadEyeFrameAsset(style, onReady) {
+    if (isFileMode()) {
+      onReady(null);
+      return;
+    }
+    var image = new Image();
+    var path = getEyeFrameAssetPath(style);
+    var settled = false;
+    var finishLoad = function (asset) {
+      if (settled) return;
+      settled = true;
+      onReady(asset);
+    };
+    if (!path) {
+      finishLoad(null);
+      return;
+    }
+    image.onload = function () {
+      finishLoad(image);
+    };
+    image.onerror = function () {
+      finishLoad(null);
+    };
+    image.src = path;
+    window.setTimeout(function () {
+      finishLoad(null);
+    }, 800);
+  }
+
+  function loadEyeBallAsset(style, onReady) {
+    if (isFileMode()) {
+      onReady(null);
+      return;
+    }
+    var image = new Image();
+    var path = getEyeBallAssetPath(style);
+    var settled = false;
+    var finishLoad = function (asset) {
+      if (settled) return;
+      settled = true;
+      onReady(asset);
+    };
+    if (!path) {
+      finishLoad(null);
+      return;
+    }
+    image.onload = function () {
+      finishLoad(image);
+    };
+    image.onerror = function () {
+      finishLoad(null);
+    };
+    image.src = path;
+    window.setTimeout(function () {
+      finishLoad(null);
+    }, 800);
+  }
+
+  function drawFrameAsset(context, image, left, top, size, color) {
+    var mask = document.createElement("canvas");
+    var maskContext = mask.getContext("2d");
+    mask.width = Math.ceil(size);
+    mask.height = Math.ceil(size);
+    maskContext.drawImage(image, 0, 0, size, size);
+    maskContext.globalCompositeOperation = "source-in";
+    maskContext.fillStyle = color;
+    maskContext.fillRect(0, 0, size, size);
+    context.save();
+    context.globalCompositeOperation = "source-over";
+    context.drawImage(mask, left, top);
+    context.restore();
+  }
+
   function drawFinder(
     context,
     x,
@@ -403,6 +672,8 @@
     ballRotations,
     foreground,
     background,
+    frameAsset,
+    ballAsset,
   ) {
     var outer = moduleSize * 7;
     var centerX = x * moduleSize + outer / 2;
@@ -410,30 +681,110 @@
     context.save();
     rotateShape(context, centerX, centerY, frameRotations);
     context.fillStyle = foreground;
-    fillShape(context, x * moduleSize, y * moduleSize, outer, frameStyle);
-    if (frameStyle !== "frame3") {
-      context.fillStyle = background;
-      fillShape(
+    if (frameAsset) {
+      drawFrameAsset(
         context,
-        (x + 1) * moduleSize,
-        (y + 1) * moduleSize,
-        moduleSize * 5,
-        frameStyle,
+        frameAsset,
+        x * moduleSize,
+        y * moduleSize,
+        outer,
+        foreground,
       );
+    } else {
+      fillShape(context, x * moduleSize, y * moduleSize, outer, frameStyle);
+      if (frameStyle !== "frame3") {
+        context.fillStyle = background;
+        fillShape(
+          context,
+          (x + 1) * moduleSize,
+          (y + 1) * moduleSize,
+          moduleSize * 5,
+          frameStyle,
+        );
+      }
     }
     context.restore();
 
     context.save();
     rotateShape(context, centerX, centerY, ballRotations);
     context.fillStyle = foreground;
-    fillShape(
-      context,
-      (x + 2) * moduleSize,
-      (y + 2) * moduleSize,
-      moduleSize * 3,
-      ballStyle,
-    );
+    if (ballAsset) {
+      drawFrameAsset(
+        context,
+        ballAsset,
+        (x + 2) * moduleSize,
+        (y + 2) * moduleSize,
+        moduleSize * 3,
+        foreground,
+      );
+    } else {
+      fillShape(
+        context,
+        (x + 2) * moduleSize,
+        (y + 2) * moduleSize,
+        moduleSize * 3,
+        ballStyle,
+      );
+    }
     context.restore();
+  }
+
+  function drawFinders(
+    context,
+    moduleCount,
+    moduleSize,
+    config,
+    foreground,
+    background,
+    onDone,
+  ) {
+    loadEyeFrameAsset(config.eye || "frame0", function (frameAsset) {
+      loadEyeBallAsset(config.eyeBall || "ball0", function (ballAsset) {
+        drawFinder(
+          context,
+          0,
+          0,
+          moduleSize,
+          config.eye || "frame0",
+          config.eyeBall || "ball0",
+          config.erf1,
+          config.brf1,
+          foreground,
+          background,
+          frameAsset,
+          ballAsset,
+        );
+        drawFinder(
+          context,
+          moduleCount - 7,
+          0,
+          moduleSize,
+          config.eye || "frame0",
+          config.eyeBall || "ball0",
+          config.erf2,
+          config.brf2,
+          foreground,
+          background,
+          frameAsset,
+          ballAsset,
+        );
+        drawFinder(
+          context,
+          0,
+          moduleCount - 7,
+          moduleSize,
+          config.eye || "frame0",
+          config.eyeBall || "ball0",
+          config.erf3,
+          config.brf3,
+          foreground,
+          background,
+          frameAsset,
+          ballAsset,
+        );
+        onDone();
+      });
+    });
   }
 
   function composeQr(scope, qrInstance, qrSource) {
@@ -446,7 +797,9 @@
     var context = canvas.getContext("2d");
     var config = scope.qrcode.config;
     var moduleCount = matrix.getModuleCount();
-    var moduleSize = size / moduleCount;
+    var quietZone = Math.max(12, Math.round(size * 0.045));
+    var qrSize = size - quietZone * 2;
+    var moduleSize = qrSize / moduleCount;
     var foreground = config.bodyColor || "#000000";
     var background = config.bgColor || "#FFFFFF";
     var gradient = context.createLinearGradient(0, 0, size, size);
@@ -454,84 +807,92 @@
     gradient.addColorStop(1, config.gradientColor2 || foreground);
     context.fillStyle = background;
     context.fillRect(0, 0, size, size);
+    context.save();
+    context.strokeStyle =
+      config.gradientColor1 && config.gradientColor2 ? gradient : foreground;
+    context.lineWidth = Math.max(3, Math.round(size * 0.012));
+    context.beginPath();
+    context.roundRect(
+      context.lineWidth / 2,
+      context.lineWidth / 2,
+      size - context.lineWidth,
+      size - context.lineWidth,
+      Math.max(12, Math.round(size * 0.035)),
+    );
+    context.stroke();
+    context.translate(quietZone, quietZone);
     context.fillStyle =
       config.gradientColor1 && config.gradientColor2 ? gradient : foreground;
     context.imageSmoothingEnabled = false;
     for (var row = 0; row < moduleCount; row += 1) {
       for (var column = 0; column < moduleCount; column += 1) {
-        if (matrix.isDark(row, column)) {
+        if (
+          matrix.isDark(row, column) &&
+          !isFinderModule(row, column, moduleCount)
+        ) {
           drawModule(context, column, row, moduleSize, config.body || "square");
         }
       }
     }
-    drawFinder(
+    drawFinders(
       context,
-      0,
-      0,
+      moduleCount,
       moduleSize,
-      config.eye || "frame0",
-      config.eyeBall || "ball0",
-      config.erf1,
-      config.brf1,
+      config,
       foreground,
       background,
-    );
-    drawFinder(
-      context,
-      moduleCount - 7,
-      0,
-      moduleSize,
-      config.eye || "frame0",
-      config.eyeBall || "ball0",
-      config.erf2,
-      config.brf2,
-      foreground,
-      background,
-    );
-    drawFinder(
-      context,
-      0,
-      moduleCount - 7,
-      moduleSize,
-      config.eye || "frame0",
-      config.eyeBall || "ball0",
-      config.erf3,
-      config.brf3,
-      foreground,
-      background,
-    );
-
-    var qrDataUrl = canvas.toDataURL("image/png");
-    var logoSource = getLogoSource(scope);
-    if (logoSource) {
-      var logo = new Image();
-      logo.onload = function () {
-        try {
-          var logoSize = Math.round(size * 0.2);
-          var x = Math.round((size - logoSize) / 2);
-          var y = Math.round((size - logoSize) / 2);
-          context.fillStyle = scope.qrcode.config.bgColor || "#FFFFFF";
-          context.fillRect(x - 12, y - 12, logoSize + 24, logoSize + 24);
-          context.drawImage(logo, x, y, logoSize, logoSize);
-          finish(scope, canvas.toDataURL("image/png"));
-        } catch (error) {
+      function () {
+        context.restore();
+        var qrDataUrl = canvas.toDataURL("image/png");
+        var logoSource = getLogoSource(scope);
+        if (logoSource) {
+          var logo = new Image();
+          var logoSettled = false;
+          var finishWithoutLogo = function () {
+            if (logoSettled) return;
+            logoSettled = true;
+            finish(scope, qrDataUrl);
+          };
+          logo.onload = function () {
+            if (logoSettled) return;
+            logoSettled = true;
+            try {
+              var logoSize = Math.round(qrSize * 0.2);
+              var x = Math.round(quietZone + (qrSize - logoSize) / 2);
+              var y = Math.round(quietZone + (qrSize - logoSize) / 2);
+              context.fillStyle = scope.qrcode.config.bgColor || "#FFFFFF";
+              context.fillRect(x - 12, y - 12, logoSize + 24, logoSize + 24);
+              context.drawImage(logo, x, y, logoSize, logoSize);
+              finish(scope, canvas.toDataURL("image/png"));
+            } catch (error) {
+              finish(scope, qrDataUrl);
+            }
+          };
+          logo.onerror = function () {
+            finishWithoutLogo();
+          };
+          logo.src = logoSource;
+          window.setTimeout(finishWithoutLogo, 1200);
+        } else {
           finish(scope, qrDataUrl);
         }
-      };
-      logo.onerror = function () {
-        finish(scope, qrDataUrl);
-      };
-      logo.src = logoSource;
-    } else {
-      finish(scope, qrDataUrl);
-    }
+      },
+    );
   }
 
   function finish(scope, dataUrl) {
     qrCanvasDataUrl = dataUrl;
+    var previewImage = document.querySelector(".preview img");
+    if (previewImage) {
+      previewImage.src = dataUrl;
+    }
     digest(scope, function () {
+      var angularApi = getAngular();
       scope.qrcodePreview = dataUrl;
-      scope.tempQrcode = window.angular.copy(scope.qrcode);
+      scope.tempQrcode =
+        angularApi && angularApi.copy
+          ? angularApi.copy(scope.qrcode)
+          : scope.qrcode;
       scope.isLoading = false;
       scope.generateActive = true;
       if (scope._qrPendingRefresh) {
@@ -543,8 +904,57 @@
     });
   }
 
+  function generateStandalone(scope) {
+    var qrCodeConstructor =
+      window.QRCode || (typeof QRCode !== "undefined" ? QRCode : null);
+    if (!qrCodeConstructor) return;
+    scope.isLoading = true;
+    var holder = document.createElement("div");
+    holder.style.position = "fixed";
+    holder.style.left = "-10000px";
+    holder.style.top = "-10000px";
+    document.body.appendChild(holder);
+    var qrInstance = new qrCodeConstructor(holder, {
+      text: getQrText(scope),
+      width: 1000,
+      height: 1000,
+      colorDark: scope.qrcode.config.bodyColor || "#000000",
+      colorLight: scope.qrcode.config.bgColor || "#FFFFFF",
+      correctLevel: qrCodeConstructor.CorrectLevel.H,
+    });
+    if (!qrInstance._oQRCode && typeof qrInstance.makeCode === "function") {
+      qrInstance.makeCode(getQrText(scope));
+    }
+    var composeWhenReady = function (attempt) {
+      if (qrInstance && qrInstance._oQRCode) {
+        try {
+          composeQr(scope, qrInstance, holder);
+        } catch (error) {
+          scope.isLoading = false;
+          digest(scope);
+        }
+        holder.remove();
+        return;
+      }
+      if (attempt < 40) {
+        window.setTimeout(function () {
+          composeWhenReady(attempt + 1);
+        }, 50);
+        return;
+      }
+      holder.remove();
+      scope.isLoading = false;
+      digest(scope);
+    };
+    composeWhenReady(0);
+  }
+
+  window.localQrGenerate = generateStandalone;
+
   function attach(scope) {
     var refreshTimer = null;
+    scope.isLoading = false;
+    scope.generateActive = true;
 
     function queueRefresh() {
       scope.generateActive = true;
@@ -615,10 +1025,42 @@
         colorLight: scope.qrcode.config.bgColor || "#FFFFFF",
         correctLevel: qrCodeConstructor.CorrectLevel.H,
       });
-      window.setTimeout(function () {
-        composeQr(scope, qrInstance, holder);
+      if (!qrInstance._oQRCode && typeof qrInstance.makeCode === "function") {
+        qrInstance.makeCode(getQrText(scope));
+      }
+      var composeWhenReady = function (attempt) {
+        if (qrInstance && qrInstance._oQRCode) {
+          try {
+            composeQr(scope, qrInstance, holder);
+          } catch (error) {
+            scope.isLoading = false;
+            digest(scope);
+          }
+          holder.remove();
+          return;
+        }
+        if (attempt < 40) {
+          window.setTimeout(function () {
+            composeWhenReady(attempt + 1);
+          }, 50);
+          return;
+        }
         holder.remove();
-      }, 50);
+        scope.isLoading = false;
+        digest(scope);
+      };
+      composeWhenReady(0);
+      window.setTimeout(function () {
+        if (!scope.isLoading) return;
+        var fallbackCanvas = holder.querySelector("canvas");
+        if (fallbackCanvas) {
+          finish(scope, fallbackCanvas.toDataURL("image/png"));
+        } else {
+          scope.isLoading = false;
+          digest(scope);
+        }
+        holder.remove();
+      }, 10000);
     }
 
     scope.downloadLocalQr = function (format) {
